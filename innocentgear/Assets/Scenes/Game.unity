@@ -695,8 +695,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03486f862204b8741b97069a25a5cefd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runSpeed: 10
-  jumpSpeed: 2000
+  runSpeed: 8
+  sprintSpeed: 16
+  jumpSpeed: 1500
+  groundDashSpeed: 500
 --- !u!50 &1220494832
 Rigidbody2D:
   serializedVersion: 4
