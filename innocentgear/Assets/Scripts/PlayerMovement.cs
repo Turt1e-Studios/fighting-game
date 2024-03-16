@@ -1,6 +1,7 @@
 using System;
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -8,10 +9,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float sprintSpeed;
     [SerializeField] private float jumpSpeed;
     [SerializeField] private float groundDashSpeed;
-
+    [SerializeField] private float backwardsAirDashSpeed;
+    [SerializeField] private float forwardsAirDashSpeed;
+    [SerializeField] private float groundDashDuration = 1f;
+    [SerializeField] private float airDashBackwardsDuration = 0.2f;
+    [SerializeField] private float airDashForwardsDuration = 0.4f;
+    [SerializeField] private float superJumpSpeed;
+    
     private const float DelayBetweenPresses = 0.25f;
     private Rigidbody2D _rigidbody2D;
     private Vector2 _velocity;
+    private Vector2 _changeInVelocity;
     private KeyCode _doublePressedKey;
     private float _lastPressedTime;
     private bool _isGrounded;
@@ -27,8 +35,22 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // Check for double presses
-        CheckDoublePress(KeyCode.D, () => _sprinting = true, () => _sprinting = false);
-        CheckDoublePress(KeyCode.A, Dash);
+        if (_isGrounded)
+        {
+            CheckDoublePress(KeyCode.D, () => _sprinting = true, () => _sprinting = false);
+            CheckDoublePress(KeyCode.A, GroundDash);
+            if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.W))
+            {
+                SuperJump();
+            }
+        }
+        else
+        {
+            CheckDoublePress(KeyCode.D, AirDashForwards);
+            CheckDoublePress(KeyCode.A, AirDashBackwards);
+        }
+
+        
 
         // Move player horizontally
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"),0);
@@ -38,22 +60,73 @@ public class PlayerMovement : MonoBehaviour
         {
             moveSpeed = sprintSpeed;
         }
-        transform.Translate(moveSpeed * Time.deltaTime * _velocity);
+        transform.Translate(Time.deltaTime * (moveSpeed *  _velocity + _changeInVelocity));
 
         // Check for jumps, on ground or double jumping
-        if (Input.GetButtonDown("Jump") && (_isGrounded || !_usedAirMove))
+        if (Input.GetKeyDown(KeyCode.W) && (_isGrounded || !_usedAirMove))
         {
             if (!_isGrounded)
             {
                 _usedAirMove = true;
             }
-            _rigidbody2D.AddForce(Vector2.up * jumpSpeed);
+            _rigidbody2D.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
         }
     }
 
-    void Dash()
+    void GroundDash()
     {
-        _rigidbody2D.AddForce(Vector2.left * groundDashSpeed);
+        // Wanted to make it transform based instead of rigidbody based but I give up
+        
+        //StartCoroutine(ChangeVelocity(groundDashSpeed * Vector2.left));
+        //ChangeVelocity(groundDashSpeed * Vector2.left);
+        //Invoke(ChangeVelocity(groundDashSpeed * Vector2.right), 3f);
+        _rigidbody2D.velocity = new Vector2(-1f, 0f) * groundDashSpeed;
+        //_rigidbody2D.AddForce(Vector2.left * groundDashSpeed, ForceMode2D.Impulse);
+        StartCoroutine(ResetVelocity(groundDashDuration));
+    }
+    
+    private IEnumerator ResetVelocity (float interval)
+    {
+        yield return new WaitForSeconds(interval);
+        _rigidbody2D.velocity = new Vector2(0, 0);
+    }
+
+    IEnumerator ChangeVelocity(Vector2 velocity)
+    {
+        yield return new WaitForSeconds(3f);
+        _changeInVelocity += velocity;
+    }
+
+    void SuperJump()
+    {
+        if (_usedAirMove) return;
+        _rigidbody2D.AddForce(Vector2.up * superJumpSpeed, ForceMode2D.Impulse);
+        _usedAirMove = true;
+    }
+
+    void AirDashBackwards()
+    {
+        float originalGravity = _rigidbody2D.gravityScale;
+        //_rigidbody2D.gravityScale = 0f;
+        _rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+        _rigidbody2D.AddForce(Vector2.left * backwardsAirDashSpeed, ForceMode2D.Impulse);
+        StartCoroutine(SetGravity(airDashBackwardsDuration));
+    }
+
+    void AirDashForwards()
+    {
+        float originalGravity = _rigidbody2D.gravityScale;
+        //_rigidbody2D.gravityScale = 0f;
+        _rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+        _rigidbody2D.AddForce(Vector2.right * forwardsAirDashSpeed, ForceMode2D.Impulse);
+        StartCoroutine(SetGravity(airDashForwardsDuration));
+    }
+
+    private IEnumerator SetGravity(float interval)
+    {
+        yield return new WaitForSeconds(interval);
+        _rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+        //_rigidbody2D.gravityScale = gravity;
     }
 
     // Player enters the ground
@@ -75,6 +148,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Calls the function "action" upon a double press. Activates negativeAction upon the end of the double press.
     void CheckDoublePress(KeyCode key, Action action, Action negativeAction = null)
     {
         if (Input.GetKeyDown(key))

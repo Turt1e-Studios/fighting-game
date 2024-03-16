@@ -695,10 +695,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03486f862204b8741b97069a25a5cefd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runSpeed: 8
-  sprintSpeed: 16
-  jumpSpeed: 1500
-  groundDashSpeed: 500
+  runSpeed: 6
+  sprintSpeed: 14
+  jumpSpeed: 45
+  groundDashSpeed: 22
+  backwardsAirDashSpeed: 30
+  forwardsAirDashSpeed: 50
+  groundDashDuration: 0.2
+  airDashBackwardsDuration: 0.1
+  airDashForwardsDuration: 0.4
+  superJumpSpeed: 60
 --- !u!50 &1220494832
 Rigidbody2D:
   serializedVersion: 4
@@ -712,9 +718,9 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 2
-  m_LinearDrag: 0
+  m_LinearDrag: 3
   m_AngularDrag: 0.05
-  m_GravityScale: 5
+  m_GravityScale: 4
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
