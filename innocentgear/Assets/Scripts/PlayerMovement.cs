@@ -21,11 +21,16 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 _velocity;
     private Vector2 _changeInVelocity;
     private KeyCode _doublePressedKey;
+    private KeyCode _previousKey;
     private float _lastPressedTime;
     private bool _isGrounded;
     private bool _usedAirMove;
     private bool _pressedFirstTime;
+    private bool _pressedFirstTimeDouble;
     private bool _sprinting;
+    private bool _airDashed;
+    private bool _superJumpLeft;
+    private bool _superJumpRight;
 
     private void Start()
     {
@@ -39,9 +44,21 @@ public class PlayerMovement : MonoBehaviour
         {
             CheckDoublePress(KeyCode.D, () => _sprinting = true, () => _sprinting = false);
             CheckDoublePress(KeyCode.A, GroundDash);
-            if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.W))
+            
+            CheckPreviousKey(KeyCode.A, KeyCode.S, () => _superJumpLeft = true, () => _superJumpLeft = false);
+            CheckPreviousKey(KeyCode.D, KeyCode.S, () => _superJumpRight = true, () => _superJumpRight = false);
+
+            if (_superJumpLeft && !_superJumpRight)
             {
-                SuperJump();
+                CheckPreviousKey(KeyCode.W, KeyCode.A, SuperJump);
+            }
+            else if (_superJumpRight && !_superJumpLeft)
+            {
+                CheckPreviousKey(KeyCode.W, KeyCode.D, SuperJump);
+            }
+            else
+            {
+                CheckPreviousKey(KeyCode.W, KeyCode.S, SuperJump);
             }
         }
         else
@@ -49,9 +66,7 @@ public class PlayerMovement : MonoBehaviour
             CheckDoublePress(KeyCode.D, AirDashForwards);
             CheckDoublePress(KeyCode.A, AirDashBackwards);
         }
-
         
-
         // Move player horizontally
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"),0);
         _velocity = input.normalized;
@@ -73,15 +88,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Reset velocity quickly after dashing
     void GroundDash()
     {
-        // Wanted to make it transform based instead of rigidbody based but I give up
-        
-        //StartCoroutine(ChangeVelocity(groundDashSpeed * Vector2.left));
-        //ChangeVelocity(groundDashSpeed * Vector2.left);
-        //Invoke(ChangeVelocity(groundDashSpeed * Vector2.right), 3f);
         _rigidbody2D.velocity = new Vector2(-1f, 0f) * groundDashSpeed;
-        //_rigidbody2D.AddForce(Vector2.left * groundDashSpeed, ForceMode2D.Impulse);
         StartCoroutine(ResetVelocity(groundDashDuration));
     }
     
@@ -91,42 +101,52 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody2D.velocity = new Vector2(0, 0);
     }
 
-    IEnumerator ChangeVelocity(Vector2 velocity)
-    {
-        yield return new WaitForSeconds(3f);
-        _changeInVelocity += velocity;
-    }
-
     void SuperJump()
     {
         if (_usedAirMove) return;
-        _rigidbody2D.AddForce(Vector2.up * superJumpSpeed, ForceMode2D.Impulse);
+
+        Vector2 direction = Vector2.up.normalized;
+        if (_superJumpLeft)
+        {
+            //print("super jump left.");
+            direction = (Vector2.left + Vector2.up).normalized;
+        }
+        else if (_superJumpRight)
+        {
+            //print("super jump right.");
+            direction = (Vector2.right + Vector2.up).normalized;
+        }
+        _rigidbody2D.AddForce(direction * superJumpSpeed, ForceMode2D.Impulse);
+
+        if (_superJumpLeft) _superJumpLeft = false;
+        if (_superJumpRight) _superJumpRight = false;
+        
         _usedAirMove = true;
     }
 
     void AirDashBackwards()
     {
-        float originalGravity = _rigidbody2D.gravityScale;
-        //_rigidbody2D.gravityScale = 0f;
+        if (_airDashed) return;
         _rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         _rigidbody2D.AddForce(Vector2.left * backwardsAirDashSpeed, ForceMode2D.Impulse);
         StartCoroutine(SetGravity(airDashBackwardsDuration));
+        _airDashed = true;
     }
 
     void AirDashForwards()
     {
-        float originalGravity = _rigidbody2D.gravityScale;
-        //_rigidbody2D.gravityScale = 0f;
+        if (_airDashed) return;
         _rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         _rigidbody2D.AddForce(Vector2.right * forwardsAirDashSpeed, ForceMode2D.Impulse);
         StartCoroutine(SetGravity(airDashForwardsDuration));
+        _airDashed = true;
     }
 
+    // Prevent player from falling when air dashing
     private IEnumerator SetGravity(float interval)
     {
         yield return new WaitForSeconds(interval);
         _rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-        //_rigidbody2D.gravityScale = gravity;
     }
 
     // Player enters the ground
@@ -136,6 +156,7 @@ public class PlayerMovement : MonoBehaviour
         {
             _isGrounded = true;
             _usedAirMove = false;
+            _airDashed = false;
         }
     }
  
@@ -153,6 +174,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(key))
         {
+            // Pressed a key already but a different key
             if (_pressedFirstTime && key != _doublePressedKey)
             {
                 _pressedFirstTime = false;
@@ -175,6 +197,53 @@ public class PlayerMovement : MonoBehaviour
         if (_pressedFirstTime && Time.time - _lastPressedTime > DelayBetweenPresses)
         {
             _pressedFirstTime = false;
+        }
+        // Remove effect when button not pressed
+        if (!_pressedFirstTime && Input.GetKeyUp(key))
+        {
+            negativeAction?.Invoke();
+        }
+    }
+    
+    void CheckPreviousKey(KeyCode key, KeyCode previousKey, Action action, Action negativeAction = null)
+    {
+        //print(key + " " + previousKey + " " + action);
+
+        if (Input.GetKeyDown(previousKey))
+        {
+            _previousKey = previousKey;
+            _pressedFirstTimeDouble = true;
+            _lastPressedTime = Time.time;
+            return;
+        }
+
+        if (Input.GetKeyDown(key))
+        {
+            //print(_pressedFirstTime + " " + (_previousKey == previousKey) + " " + (Time.time - _lastPressedTime <= DelayBetweenPresses));
+
+            if (_pressedFirstTime && _previousKey != previousKey)
+            {
+                _pressedFirstTimeDouble = false;
+            }
+            
+            // If already pressed and second time hit within time limit
+            if (_pressedFirstTimeDouble && Time.time - _lastPressedTime <= DelayBetweenPresses)
+            {
+                action();
+                _pressedFirstTimeDouble = false;
+            }
+            else // Hit the first time normally
+            {
+                _pressedFirstTimeDouble = true;
+                //_previousKey = key;
+            }
+            _lastPressedTime = Time.time;
+        }
+        // Reset boolean if button wasn't pressed soon enough
+        if (_pressedFirstTimeDouble && Time.time - _lastPressedTime > DelayBetweenPresses)
+        {
+            _pressedFirstTime = false;
+            negativeAction?.Invoke();
         }
         // Remove effect when button not pressed
         if (!_pressedFirstTime && Input.GetKeyUp(key))
