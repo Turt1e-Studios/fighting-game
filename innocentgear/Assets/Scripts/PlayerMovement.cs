@@ -32,6 +32,11 @@ public class PlayerMovement : MonoBehaviour
     private bool _superJumpLeft;
     private bool _superJumpRight;
 
+    public bool IsGrounded()
+    {
+        return _isGrounded;
+    }
+    
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
