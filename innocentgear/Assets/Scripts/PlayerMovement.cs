@@ -5,6 +5,7 @@ using Vector2 = UnityEngine.Vector2;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private GameObject enemyPlayer;
     [SerializeField] private float runSpeed;
     [SerializeField] private float sprintSpeed;
     [SerializeField] private float jumpSpeed;
@@ -15,9 +16,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float airDashBackwardsDuration = 0.2f;
     [SerializeField] private float airDashForwardsDuration = 0.4f;
     [SerializeField] private float superJumpSpeed;
-    
+    [SerializeField] private KeyCode upMovementKey;
+    [SerializeField] private KeyCode downMovementKey;
+    [SerializeField] private KeyCode leftMovementKey;
+    [SerializeField] private KeyCode rightMovementKey;
+    [SerializeField] private bool isPlayerOne;
+
     private const float DelayBetweenPresses = 0.25f;
     private Rigidbody2D _rigidbody2D;
+    private SpriteRenderer _spriteRenderer;
     private Vector2 _velocity;
     private Vector2 _changeInVelocity;
     private KeyCode _doublePressedKey;
@@ -31,49 +38,86 @@ public class PlayerMovement : MonoBehaviour
     private bool _airDashed;
     private bool _superJumpLeft;
     private bool _superJumpRight;
+    private String _player;
+    private float _oppositeDirectionMultiplier = 1;
+    private bool _isFlipped; // Default is towards the right
+    private float _enemyDisplacement; // To enemy
 
     public bool IsGrounded()
     {
         return _isGrounded;
     }
+
+    public bool IsFlipped()
+    {
+        return _isFlipped;
+    }
     
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _player = isPlayerOne ? "Horizontal1" : "Horizontal2";
+        _enemyDisplacement = isPlayerOne ? 1f : -1f;
+        if (!isPlayerOne)
+        {
+            FlipControls();
+        }
+    }
+
+    private void FlipControls()
+    {
+        _isFlipped = !_isFlipped; // set public flip variable
+        (leftMovementKey, rightMovementKey) = (rightMovementKey, leftMovementKey); // flip controls
+        _oppositeDirectionMultiplier *= -1; // flip direction of movement
+        //_spriteRenderer.flipX = !_spriteRenderer.flipX; // flip sprite
+    }
+    
+    private bool oppositeSigns(float x, float y)
+    {
+        return x < 0? y >= 0: y < 0;
     }
 
     void Update()
     {
+        if (oppositeSigns(enemyPlayer.transform.position.x - transform.position.x, _enemyDisplacement))
+        {
+            FlipControls();
+        }
+
+        _enemyDisplacement = enemyPlayer.transform.position.x - transform.position.x;
+
+        
         // Check for double presses
         if (_isGrounded)
         {
-            CheckDoublePress(KeyCode.D, () => _sprinting = true, () => _sprinting = false);
-            CheckDoublePress(KeyCode.A, GroundDash);
+            CheckDoublePress(rightMovementKey, () => _sprinting = true, () => _sprinting = false);
+            CheckDoublePress(leftMovementKey, GroundDash);
             
-            CheckPreviousKey(KeyCode.A, KeyCode.S, () => _superJumpLeft = true, () => _superJumpLeft = false);
-            CheckPreviousKey(KeyCode.D, KeyCode.S, () => _superJumpRight = true, () => _superJumpRight = false);
+            CheckPreviousKey(leftMovementKey, downMovementKey, () => _superJumpLeft = true, () => _superJumpLeft = false);
+            CheckPreviousKey(rightMovementKey, downMovementKey, () => _superJumpRight = true, () => _superJumpRight = false);
 
             if (_superJumpLeft && !_superJumpRight)
             {
-                CheckPreviousKey(KeyCode.W, KeyCode.A, SuperJump);
+                CheckPreviousKey(upMovementKey, leftMovementKey, SuperJump);
             }
             else if (_superJumpRight && !_superJumpLeft)
             {
-                CheckPreviousKey(KeyCode.W, KeyCode.D, SuperJump);
+                CheckPreviousKey(upMovementKey, rightMovementKey, SuperJump);
             }
             else
             {
-                CheckPreviousKey(KeyCode.W, KeyCode.S, SuperJump);
+                CheckPreviousKey(upMovementKey, downMovementKey, SuperJump);
             }
         }
         else
         {
-            CheckDoublePress(KeyCode.D, AirDashForwards);
-            CheckDoublePress(KeyCode.A, AirDashBackwards);
+            CheckDoublePress(rightMovementKey, AirDashForwards);
+            CheckDoublePress(leftMovementKey, AirDashBackwards);
         }
         
         // Move player horizontally
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"),0);
+        Vector2 input = new Vector2(Input.GetAxisRaw(_player),0);
         _velocity = input.normalized;
         float moveSpeed = runSpeed;
         if (_sprinting)
@@ -83,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
         transform.Translate(Time.deltaTime * (moveSpeed *  _velocity + _changeInVelocity));
 
         // Check for jumps, on ground or double jumping
-        if (Input.GetKeyDown(KeyCode.W) && (_isGrounded || !_usedAirMove))
+        if (Input.GetKeyDown(upMovementKey) && (_isGrounded || !_usedAirMove))
         {
             if (!_isGrounded)
             {
@@ -96,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
     // Reset velocity quickly after dashing
     void GroundDash()
     {
-        _rigidbody2D.velocity = new Vector2(-1f, 0f) * groundDashSpeed;
+        _rigidbody2D.velocity = new Vector2(-1f * _oppositeDirectionMultiplier, 0f) * groundDashSpeed;
         StartCoroutine(ResetVelocity(groundDashDuration));
     }
     
@@ -114,12 +158,12 @@ public class PlayerMovement : MonoBehaviour
         if (_superJumpLeft)
         {
             //print("super jump left.");
-            direction = (Vector2.left + Vector2.up).normalized;
+            direction = (Vector2.left * _oppositeDirectionMultiplier + Vector2.up).normalized;
         }
         else if (_superJumpRight)
         {
             //print("super jump right.");
-            direction = (Vector2.right + Vector2.up).normalized;
+            direction = (Vector2.right * _oppositeDirectionMultiplier + Vector2.up).normalized;
         }
         _rigidbody2D.AddForce(direction * superJumpSpeed, ForceMode2D.Impulse);
 
@@ -133,7 +177,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_airDashed) return;
         _rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-        _rigidbody2D.AddForce(Vector2.left * backwardsAirDashSpeed, ForceMode2D.Impulse);
+        _rigidbody2D.AddForce(Vector2.left * (backwardsAirDashSpeed * _oppositeDirectionMultiplier), ForceMode2D.Impulse);
         StartCoroutine(SetGravity(airDashBackwardsDuration));
         _airDashed = true;
     }
@@ -142,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_airDashed) return;
         _rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-        _rigidbody2D.AddForce(Vector2.right * forwardsAirDashSpeed, ForceMode2D.Impulse);
+        _rigidbody2D.AddForce(Vector2.right * (forwardsAirDashSpeed * _oppositeDirectionMultiplier), ForceMode2D.Impulse);
         StartCoroutine(SetGravity(airDashForwardsDuration));
         _airDashed = true;
     }

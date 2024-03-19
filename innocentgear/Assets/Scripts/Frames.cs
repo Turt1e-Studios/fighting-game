@@ -11,7 +11,7 @@ public class Frames : MonoBehaviour
     void Start()
     {
         _startTime = Time.time;
-        Time.fixedDeltaTime = 0.01666667f; // Set fixed update to 60 FPS.
+        //Time.fixedDeltaTime = 0.01666667f; // Set fixed update to 60 FPS.
     }
 
     // Update is called once per frame

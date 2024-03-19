@@ -3,22 +3,28 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     // See https://www.dustloop.com/w/Notation for fighting game notation
+
+    [SerializeField] private KeyCode upMovementKey;
+    [SerializeField] private KeyCode downMovementKey;
+    [SerializeField] private KeyCode leftMovementKey;
+    [SerializeField] private KeyCode rightMovementKey;
+        
     public int CurrentDirection { get; private set; }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(upMovementKey))
         {
-            if (Input.GetKey(KeyCode.S))
+            if (Input.GetKey(downMovementKey))
             {
                 CurrentDirection = 5;
             }
-            else if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            else if (Input.GetKey(leftMovementKey) && !Input.GetKey(rightMovementKey))
             {
                 CurrentDirection = 7;
             }
-            else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(rightMovementKey) && !Input.GetKey(leftMovementKey))
             {
                 CurrentDirection = 9;
             }
@@ -27,13 +33,13 @@ public class PlayerInput : MonoBehaviour
                 CurrentDirection = 8;
             }
         }
-        else if (Input.GetKey(KeyCode.A))
+        else if (Input.GetKey(leftMovementKey))
         {
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(rightMovementKey))
             {
                 CurrentDirection = 5;
             }
-            else if (Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(downMovementKey))
             {
                 CurrentDirection = 1;
             }
@@ -42,11 +48,11 @@ public class PlayerInput : MonoBehaviour
                 CurrentDirection = 4;
             }
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(rightMovementKey))
         {
-            CurrentDirection = Input.GetKey(KeyCode.S) ? 3 : 6;
+            CurrentDirection = Input.GetKey(downMovementKey) ? 3 : 6;
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(downMovementKey))
         {
             CurrentDirection = 2;
         }
