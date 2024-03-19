@@ -24,7 +24,6 @@ public class PlayerMovement : MonoBehaviour
 
     private const float DelayBetweenPresses = 0.25f;
     private Rigidbody2D _rigidbody2D;
-    private SpriteRenderer _spriteRenderer;
     private Vector2 _velocity;
     private Vector2 _changeInVelocity;
     private KeyCode _doublePressedKey;
@@ -56,7 +55,6 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
         _player = isPlayerOne ? "Horizontal1" : "Horizontal2";
         _enemyDisplacement = isPlayerOne ? 1f : -1f;
         if (!isPlayerOne)
@@ -73,14 +71,14 @@ public class PlayerMovement : MonoBehaviour
         //_spriteRenderer.flipX = !_spriteRenderer.flipX; // flip sprite
     }
     
-    private bool oppositeSigns(float x, float y)
+    private bool OppositeSigns(float x, float y)
     {
         return x < 0? y >= 0: y < 0;
     }
 
     void Update()
     {
-        if (oppositeSigns(enemyPlayer.transform.position.x - transform.position.x, _enemyDisplacement))
+        if (OppositeSigns(enemyPlayer.transform.position.x - transform.position.x, _enemyDisplacement))
         {
             FlipControls();
         }
