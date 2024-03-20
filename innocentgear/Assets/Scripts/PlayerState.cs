@@ -8,6 +8,21 @@ public class PlayerState : MonoBehaviour
     private PlayerMovement _playerMovement;
     private Normals _normals;
     private Frames _frames;
+    private Collider2D _hitbox;
+    private bool _hitboxActive;
+
+    void Update()
+    {
+        if (_hitboxActive)
+        {
+            print("hitbox active.");
+        }
+        // Other way to do this in the coroutine method was not consistent.
+        if (_hitboxActive && _hitbox.IsTouchingLayers(LayerMask.GetMask("Hurtbox2")))
+        {
+            print("hit!");
+        }
+    }
     
     // Start is called before the first frame update
     void Start()
@@ -38,33 +53,21 @@ public class PlayerState : MonoBehaviour
         StartCoroutine(WaitForFrames(startupFrames, () => Active(hitbox, activeFrames, recoveryFrames)));
     }
 
-    IEnumerator WaitForFixedFrame(Action action)
-    {
-        yield return new WaitForFixedUpdate();
-        action();
-    }
-
-    void ActivateHitbox(Collider2D hitbox, int activeFrames, int recoveryFrames)
-    {
-        transform.Translate(new Vector3(0.01f, 0, 0)); // In order to register physics collision because it doesn't work otherwise.
-        if (hitbox.IsTouchingLayers(LayerMask.GetMask("Hurtbox2")))
-        {
-            print("hit!");
-        }
-        
-        StartCoroutine(WaitForFrames(activeFrames, () => Recovery(hitbox, recoveryFrames)));
-    }
-
     void Active(Collider2D hitbox, int activeFrames, int recoveryFrames)
     {
         _spriteRenderer.color = Color.red;
         hitbox.gameObject.SetActive(true);
-        StartCoroutine(WaitForFixedFrame(() => ActivateHitbox(hitbox, activeFrames, recoveryFrames))); // Hitbox detection only occurs on the next fixed update.
+        _hitboxActive = true;
+        _hitbox = hitbox;
+        GetComponent<Rigidbody2D>().AddForce(new Vector2(0.01f, 0f));
+        StartCoroutine(WaitForFrames(activeFrames, () => Recovery(hitbox, recoveryFrames)));
+        //StartCoroutine(WaitForFixedFrame(() => ActivateHitbox(hitbox, activeFrames, recoveryFrames))); // Hitbox detection only occurs on the next fixed update.
     }
 
     void Recovery(Collider2D hitbox, int recoveryFrames)
     {
         _spriteRenderer.color = Color.blue;
+        _hitboxActive = false;
         hitbox.gameObject.SetActive(false);
         StartCoroutine(WaitForFrames(recoveryFrames, ResetState));
     }
