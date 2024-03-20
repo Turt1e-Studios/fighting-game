@@ -61,4 +61,10 @@ public class PlayerInput : MonoBehaviour
             CurrentDirection = 5;
         }
     }
+
+    public void ChangeDirection()
+    {
+        print("changed direction?");
+        (leftMovementKey, rightMovementKey) = (rightMovementKey, leftMovementKey);
+    }
 }

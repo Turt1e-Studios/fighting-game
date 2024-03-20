@@ -41,6 +41,8 @@ public class PlayerMovement : MonoBehaviour
     private float _oppositeDirectionMultiplier = 1;
     private bool _isFlipped; // Default is towards the right
     private float _enemyDisplacement; // To enemy
+    private PlayerInput _playerInput;
+    private Transform _transform;
 
     public bool IsGrounded()
     {
@@ -55,6 +57,8 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _playerInput = GetComponent<PlayerInput>();
+        _transform = GetComponent<Transform>();
         _player = isPlayerOne ? "Horizontal1" : "Horizontal2";
         _enemyDisplacement = isPlayerOne ? 1f : -1f;
         if (!isPlayerOne)
@@ -68,7 +72,11 @@ public class PlayerMovement : MonoBehaviour
         _isFlipped = !_isFlipped; // set public flip variable
         (leftMovementKey, rightMovementKey) = (rightMovementKey, leftMovementKey); // flip controls
         _oppositeDirectionMultiplier *= -1; // flip direction of movement
-        //_spriteRenderer.flipX = !_spriteRenderer.flipX; // flip sprite
+        _playerInput.ChangeDirection();
+        // localScale instead of spriteRenderer to also affect children
+        Vector3 flippedScale = _transform.localScale;
+        flippedScale.x *= -1;
+        _transform.localScale = flippedScale;
     }
     
     private bool OppositeSigns(float x, float y)
@@ -78,12 +86,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (OppositeSigns(enemyPlayer.transform.position.x - transform.position.x, _enemyDisplacement))
+        if (OppositeSigns(enemyPlayer.transform.position.x - _transform.position.x, _enemyDisplacement))
         {
             FlipControls();
         }
 
-        _enemyDisplacement = enemyPlayer.transform.position.x - transform.position.x;
+        _enemyDisplacement = enemyPlayer.transform.position.x - _transform.position.x;
 
         
         // Check for double presses
@@ -122,7 +130,7 @@ public class PlayerMovement : MonoBehaviour
         {
             moveSpeed = sprintSpeed;
         }
-        transform.Translate(Time.deltaTime * (moveSpeed *  _velocity + _changeInVelocity));
+        _transform.Translate(Time.deltaTime * (moveSpeed *  _velocity + _changeInVelocity));
 
         // Check for jumps, on ground or double jumping
         if (Input.GetKeyDown(upMovementKey) && (_isGrounded || !_usedAirMove))

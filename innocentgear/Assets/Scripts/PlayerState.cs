@@ -50,7 +50,7 @@ public class PlayerState : MonoBehaviour
         {
             print("hit!");
         }
-        StartCoroutine(WaitForFrames(activeFrames, () => Recovery(hitbox, recoveryFrames)));
+        StartCoroutine(WaitForFrames(activeFrames + 1, () => Recovery(hitbox, recoveryFrames)));
     }
 
     void Active(Collider2D hitbox, int activeFrames, int recoveryFrames)
