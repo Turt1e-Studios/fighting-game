@@ -46,11 +46,13 @@ public class PlayerState : MonoBehaviour
 
     void ActivateHitbox(Collider2D hitbox, int activeFrames, int recoveryFrames)
     {
-        if (hitbox.IsTouchingLayers(LayerMask.GetMask("Hurtbox")))
+        transform.Translate(new Vector3(0.01f, 0, 0)); // In order to register physics collision because it doesn't work otherwise.
+        if (hitbox.IsTouchingLayers(LayerMask.GetMask("Hurtbox2")))
         {
             print("hit!");
         }
-        StartCoroutine(WaitForFrames(activeFrames + 1, () => Recovery(hitbox, recoveryFrames)));
+        
+        StartCoroutine(WaitForFrames(activeFrames, () => Recovery(hitbox, recoveryFrames)));
     }
 
     void Active(Collider2D hitbox, int activeFrames, int recoveryFrames)
