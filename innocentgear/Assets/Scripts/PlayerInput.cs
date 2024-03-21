@@ -64,7 +64,6 @@ public class PlayerInput : MonoBehaviour
 
     public void ChangeDirection()
     {
-        print("changed direction?");
         (leftMovementKey, rightMovementKey) = (rightMovementKey, leftMovementKey);
     }
 }

@@ -4,8 +4,10 @@ public class Normals : MonoBehaviour
 {
     // See https://www.dustloop.com/w/Notation for fighting game notation
 
-    [SerializeField] private BoxCollider2D[] attackHitboxes;
+    //[SerializeField] private BoxCollider2D[] attackHitboxes;
     [SerializeField] private KeyCode punchKey;
+
+    [SerializeField] private AttackMove fiveP;
     // Order of hitboxes: 5P
     
     private PlayerInput _playerInput;
@@ -27,13 +29,8 @@ public class Normals : MonoBehaviour
         {
             if (Input.GetKeyDown(punchKey) && _playerInput.CurrentDirection is 5 or 4)
             {
-                FiveP();
+                _playerState.Move(fiveP);
             }
         }
-    }
-    
-    void FiveP()
-    {
-        _playerState.Move(attackHitboxes[0], 4, 5, 9);
     }
 }

@@ -4,26 +4,15 @@ using UnityEngine;
 
 public class PlayerState : MonoBehaviour
 {
+    [SerializeField] private GameObject standingBoxes;
     private SpriteRenderer _spriteRenderer;
     private PlayerMovement _playerMovement;
     private Normals _normals;
     private Frames _frames;
     private Collider2D _hitbox;
     private bool _hitboxActive;
+    private GameObject _boxes;
 
-    void Update()
-    {
-        if (_hitboxActive)
-        {
-            print("hitbox active.");
-        }
-        // Other way to do this in the coroutine method was not consistent.
-        if (_hitboxActive && _hitbox.IsTouchingLayers(LayerMask.GetMask("Hurtbox2")))
-        {
-            print("hit!");
-        }
-    }
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -32,50 +21,65 @@ public class PlayerState : MonoBehaviour
         _playerMovement = GetComponent<PlayerMovement>();
         _normals = GetComponent<Normals>();
     }
-
-    public void Move(Collider2D hitbox, int startupFrames, int activeFrames, int recoveryFrames)
+    
+    void Update()
+    {
+        // Other way to do this in the coroutine method was not consistent. This way is slightly inefficient however.
+        if (_hitboxActive && _hitbox.IsTouchingLayers(LayerMask.GetMask("Hurtbox2")))
+        {
+            print("hit!");
+        }
+    }
+    
+    public void Move(AttackMove move)
     {
         _playerMovement.enabled = false;
-        _normals.enabled = false;
-        Startup(hitbox, startupFrames, activeFrames, recoveryFrames);
+        _normals.enabled = false; // Just disables the script, there could be a better way to disable them.
+        Startup(move);
     }
 
+    void Startup(AttackMove move)
+    {
+        _spriteRenderer.color = Color.green;
+        StartCoroutine(WaitForFrames(move.startupFrames, () => Active(move)));
+    }
+
+    void Active(AttackMove move)
+    {
+        _spriteRenderer.color = Color.red;
+        
+        standingBoxes.SetActive(false);
+        _boxes = Instantiate(move.boxes, transform.position, transform.rotation);
+        _boxes.transform.SetParent(transform);
+        
+        _hitboxActive = true;
+        _hitbox = _boxes.transform.Find("Hitbox").GetComponent<Collider2D>();
+
+        StartCoroutine(WaitForFrames(move.activeFrames, () => Recovery(move)));
+    }
+
+    void Recovery(AttackMove move)
+    {
+        _spriteRenderer.color = Color.blue;
+        
+        Destroy(_boxes);
+        standingBoxes.SetActive(true);
+        _hitboxActive = false;
+        
+        StartCoroutine(WaitForFrames(move.recoveryFrames, ResetState));
+    }
+
+    void ResetState()
+    {
+        _spriteRenderer.color = Color.white;
+        _playerMovement.enabled = true;
+        _normals.enabled = true;
+    }
+    
     IEnumerator WaitForFrames(int frames, Action action)
     {
         int initialFrame = _frames.CurrentFrame;
         yield return new WaitUntil(() => _frames.CurrentFrame - initialFrame > frames);
         action();
-    }
-
-    void Startup(Collider2D hitbox, int startupFrames, int activeFrames, int recoveryFrames)
-    {
-        _spriteRenderer.color = Color.green;
-        StartCoroutine(WaitForFrames(startupFrames, () => Active(hitbox, activeFrames, recoveryFrames)));
-    }
-
-    void Active(Collider2D hitbox, int activeFrames, int recoveryFrames)
-    {
-        _spriteRenderer.color = Color.red;
-        hitbox.gameObject.SetActive(true);
-        _hitboxActive = true;
-        _hitbox = hitbox;
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(0.01f, 0f));
-        StartCoroutine(WaitForFrames(activeFrames, () => Recovery(hitbox, recoveryFrames)));
-        //StartCoroutine(WaitForFixedFrame(() => ActivateHitbox(hitbox, activeFrames, recoveryFrames))); // Hitbox detection only occurs on the next fixed update.
-    }
-
-    void Recovery(Collider2D hitbox, int recoveryFrames)
-    {
-        _spriteRenderer.color = Color.blue;
-        _hitboxActive = false;
-        hitbox.gameObject.SetActive(false);
-        StartCoroutine(WaitForFrames(recoveryFrames, ResetState));
-    }
-
-    void ResetState()
-    {
-        _playerMovement.enabled = true;
-        _normals.enabled = true;
-        _spriteRenderer.color = Color.white;
     }
 }
