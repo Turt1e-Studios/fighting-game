@@ -31,6 +31,7 @@ public class Blocking : MonoBehaviour
     void Update()
     {
         _spriteRenderer = _activeBoxes.transform.Find("Sprite").GetComponent<SpriteRenderer>();
+        if (!_canBlock) return;
         if (_playerInput.CurrentDirection is 1 or 2)
         {
             standingBoxes.SetActive(false);
@@ -49,7 +50,7 @@ public class Blocking : MonoBehaviour
             _lowBlock = false;
             _highBlock = true;
         }
-        else if (_canBlock)
+        else
         {
             standingBoxes.SetActive(true);
             crouchingBoxes.SetActive(false);

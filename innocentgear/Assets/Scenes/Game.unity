@@ -1639,6 +1639,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   punchKey: 117
   fiveP: {fileID: 11400000, guid: 2cd1e0593859c0043bce3434e7db670d, type: 2}
+  twoP: {fileID: 11400000, guid: 84b6236fc31f9e84fb815bf54586a926, type: 2}
 --- !u!50 &833175653
 Rigidbody2D:
   serializedVersion: 4
@@ -2103,6 +2104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   punchKey: 117
   fiveP: {fileID: 0}
+  twoP: {fileID: 0}
 --- !u!50 &1027260266
 Rigidbody2D:
   serializedVersion: 4
@@ -2761,6 +2763,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   punchKey: 99
   fiveP: {fileID: 11400000, guid: 2cd1e0593859c0043bce3434e7db670d, type: 2}
+  twoP: {fileID: 11400000, guid: 84b6236fc31f9e84fb815bf54586a926, type: 2}
 --- !u!114 &1220494834
 MonoBehaviour:
   m_ObjectHideFlags: 0

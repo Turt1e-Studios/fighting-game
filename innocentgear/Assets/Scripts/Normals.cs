@@ -8,6 +8,7 @@ public class Normals : MonoBehaviour
     [SerializeField] private KeyCode punchKey;
 
     [SerializeField] private AttackMove fiveP;
+    [SerializeField] private AttackMove twoP;
     // Order of hitboxes: 5P
     
     private PlayerInput _playerInput;
@@ -27,9 +28,16 @@ public class Normals : MonoBehaviour
     {
         if (_playerMovement.IsGrounded())
         {
-            if (Input.GetKeyDown(punchKey) && _playerInput.CurrentDirection is 5 or 4)
+            if (Input.GetKeyDown(punchKey))
             {
-                _playerState.Move(fiveP);
+                if (_playerInput.CurrentDirection is 5 or 4)
+                {
+                    _playerState.Move(fiveP);
+                }
+                else if (_playerInput.CurrentDirection is 1 or 2 or 3)
+                {
+                    _playerState.Move(twoP);
+                }
             }
         }
     }
