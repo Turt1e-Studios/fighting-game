@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Frames : MonoBehaviour
 {
+    // Can make this class static.
+    
     public int CurrentFrame { get; private set; }
 
     private const int FPS = 60; // Do not change this

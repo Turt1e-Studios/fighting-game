@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerState : MonoBehaviour
 {
-    [SerializeField] private GameObject standingBoxes;
+    [SerializeField] private bool isPlayerOne;
+    
     private SpriteRenderer _spriteRenderer;
     private PlayerMovement _playerMovement;
     private Normals _normals;
@@ -12,6 +13,9 @@ public class PlayerState : MonoBehaviour
     private Collider2D _hitbox;
     private bool _hitboxActive;
     private GameObject _boxes;
+    private Blocking _blocking;
+    private GameObject _blockingBoxes;
+    private String _enemyLayer;
 
     // Start is called before the first frame update
     void Start()
@@ -20,12 +24,14 @@ public class PlayerState : MonoBehaviour
         _frames = GameObject.Find("GameManager").GetComponent<Frames>();
         _playerMovement = GetComponent<PlayerMovement>();
         _normals = GetComponent<Normals>();
+        _blocking = GetComponent<Blocking>();
+        _enemyLayer = isPlayerOne ? "Hurtbox2" : "Hurtbox";
     }
     
     void Update()
     {
         // Other way to do this in the coroutine method was not consistent. This way is slightly inefficient however.
-        if (_hitboxActive && _hitbox.IsTouchingLayers(LayerMask.GetMask("Hurtbox2")))
+        if (_hitboxActive && _hitbox.IsTouchingLayers(LayerMask.GetMask(_enemyLayer)))
         {
             print("hit!");
         }
@@ -51,8 +57,8 @@ public class PlayerState : MonoBehaviour
         _spriteRenderer.color = Color.red;
 
         //Time.timeScale = 0;
-        
-        standingBoxes.SetActive(false);
+        _blockingBoxes = _blocking.GetCurrentBoxes();
+        _blockingBoxes.SetActive(false);
         _boxes = Instantiate(move.boxes, transform.position, transform.rotation);
         _boxes.transform.SetParent(transform);
         
@@ -70,7 +76,7 @@ public class PlayerState : MonoBehaviour
         _spriteRenderer.color = Color.blue;
         
         Destroy(_boxes);
-        standingBoxes.SetActive(true);
+        _blockingBoxes.SetActive(true);
         _hitboxActive = false;
         
         StartCoroutine(WaitForFrames(move.recoveryFrames, ResetState));

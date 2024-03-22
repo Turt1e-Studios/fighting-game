@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Blocking : MonoBehaviour
@@ -16,6 +14,7 @@ public class Blocking : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         standingBoxes.SetActive(true);
         crouchingBoxes.SetActive(false);
+        _activeBoxes = standingBoxes;
     }
 
     public GameObject GetCurrentBoxes()
