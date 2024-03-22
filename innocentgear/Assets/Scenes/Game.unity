@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 261530818}
   - component: {fileID: 261530819}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -703,7 +703,7 @@ GameObject:
   - component: {fileID: 401721451}
   - component: {fileID: 401721452}
   m_Layer: 0
-  m_Name: Capsule (1)
+  m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1442,7 +1442,7 @@ GameObject:
   - component: {fileID: 765295818}
   - component: {fileID: 765295819}
   m_Layer: 0
-  m_Name: Capsule (1)
+  m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3980,7 +3980,7 @@ GameObject:
   - component: {fileID: 2062815386}
   - component: {fileID: 2062815387}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

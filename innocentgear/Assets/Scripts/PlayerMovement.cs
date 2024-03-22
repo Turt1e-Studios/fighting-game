@@ -49,11 +49,11 @@ public class PlayerMovement : MonoBehaviour
         return _isGrounded;
     }
 
-    public bool IsFlipped()
+    public GameObject GetEnemy()
     {
-        return _isFlipped;
+        return enemyPlayer;
     }
-    
+
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();

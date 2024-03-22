@@ -33,7 +33,7 @@ public class PlayerState : MonoBehaviour
         // Other way to do this in the coroutine method was not consistent. This way is slightly inefficient however.
         if (_hitboxActive && _hitbox.IsTouchingLayers(LayerMask.GetMask(_enemyLayer)))
         {
-            print("hit!");
+            _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock();
         }
     }
     
@@ -41,6 +41,7 @@ public class PlayerState : MonoBehaviour
     {
         //_playerMovement.enabled = false;
         _normals.enabled = false; // Just disables the script, there could be a better way to disable them.
+        _blocking.SetBlock(false);
         Startup(move);
     }
 
@@ -87,6 +88,7 @@ public class PlayerState : MonoBehaviour
         _spriteRenderer.color = Color.white;
         _playerMovement.enabled = true;
         _normals.enabled = true;
+        _blocking.SetBlock(true);
     }
     
     // Perform an action after a certain amount of frames.
