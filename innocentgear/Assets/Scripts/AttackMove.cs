@@ -10,4 +10,5 @@ public class AttackMove : ScriptableObject
     public int startupFrames;
     public int activeFrames;
     public int recoveryFrames;
+    public int onBlock;
 }

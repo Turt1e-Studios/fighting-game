@@ -84,12 +84,28 @@ public class PlayerMovement : MonoBehaviour
         return x < 0? y >= 0: y < 0;
     }
 
-    void Update()
+    public void FlipHitboxModel()
+    {
+        if (_isFlipped)
+        {
+            Vector3 flippedScale = _transform.localScale;
+            flippedScale.x *= -1;
+            _transform.localScale = flippedScale;
+        }
+    }
+
+    private void CheckFlipControls()
     {
         if (OppositeSigns(enemyPlayer.transform.position.x - _transform.position.x, _enemyDisplacement))
         {
             FlipControls();
+            print("flipped controls");
         }
+    }
+
+    void Update()
+    {
+        CheckFlipControls();
 
         _enemyDisplacement = enemyPlayer.transform.position.x - _transform.position.x;
 

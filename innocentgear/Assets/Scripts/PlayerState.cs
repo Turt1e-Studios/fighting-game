@@ -33,24 +33,30 @@ public class PlayerState : MonoBehaviour
     
     public void Move(AttackMove move)
     {
-        _playerMovement.enabled = false;
+        //_playerMovement.enabled = false;
         _normals.enabled = false; // Just disables the script, there could be a better way to disable them.
         Startup(move);
     }
 
+    // Frames before attack is activated
     void Startup(AttackMove move)
     {
         _spriteRenderer.color = Color.green;
         StartCoroutine(WaitForFrames(move.startupFrames, () => Active(move)));
     }
 
+    // Frames where attack is active
     void Active(AttackMove move)
     {
         _spriteRenderer.color = Color.red;
+
+        //Time.timeScale = 0;
         
         standingBoxes.SetActive(false);
         _boxes = Instantiate(move.boxes, transform.position, transform.rotation);
         _boxes.transform.SetParent(transform);
+        
+        _playerMovement.FlipHitboxModel();
         
         _hitboxActive = true;
         _hitbox = _boxes.transform.Find("Hitbox").GetComponent<Collider2D>();
@@ -58,6 +64,7 @@ public class PlayerState : MonoBehaviour
         StartCoroutine(WaitForFrames(move.activeFrames, () => Recovery(move)));
     }
 
+    // Frames where player cannot do anything
     void Recovery(AttackMove move)
     {
         _spriteRenderer.color = Color.blue;
@@ -76,6 +83,7 @@ public class PlayerState : MonoBehaviour
         _normals.enabled = true;
     }
     
+    // Perform an action after a certain amount of frames.
     IEnumerator WaitForFrames(int frames, Action action)
     {
         int initialFrame = _frames.CurrentFrame;
