@@ -1861,7 +1861,7 @@ MonoBehaviour:
   sprintSpeed: 14
   jumpSpeed: 45
   groundDashSpeed: 22
-  backwardsAirDashSpeed: 20
+  backwardsAirDashSpeed: 30
   forwardsAirDashSpeed: 50
   groundDashDuration: 0.2
   airDashBackwardsDuration: 0.1
@@ -2979,7 +2979,7 @@ MonoBehaviour:
   sprintSpeed: 14
   jumpSpeed: 45
   groundDashSpeed: 22
-  backwardsAirDashSpeed: 20
+  backwardsAirDashSpeed: 30
   forwardsAirDashSpeed: 50
   groundDashDuration: 0.2
   airDashBackwardsDuration: 0.1

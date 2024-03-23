@@ -70,8 +70,19 @@ public class PlayerState : MonoBehaviour
     // Frames before attack is activated
     void Startup(AttackMove move)
     {
-        _spriteRenderer.color = Color.green;
-        
+        if (move.isLow)
+        {
+            _spriteRenderer.color = new Color(0, 0.5f, 0);
+        }
+        else if (move.isHigh)
+        {
+            _spriteRenderer.color = new Color(0.5f, 1f, 0.5f);
+        }
+        else
+        {
+            _spriteRenderer.color = Color.green;
+        }
+
         _playerMovement.SetMovement(false);
         
         StartCoroutine(WaitForFrames(move.startupFrames, () => Active(move)));
