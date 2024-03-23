@@ -48,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     private float _enemyDisplacement;
     private PlayerInput _playerInput;
     private Transform _transform;
+    private bool _canMove;
 
     // Returns whether the player is grounded
     public bool IsGrounded()
@@ -79,6 +80,7 @@ public class PlayerMovement : MonoBehaviour
         {
             FlipControls();
         }
+        _canMove = true;
     }
 
     // Flip the controls, movement, and appearance of the player
@@ -119,8 +121,15 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void SetMovement(bool set)
+    {
+        _canMove = set;
+    }
+
     void Update()
     {
+        if (!_canMove) return;
+            
         CheckFlipControls();
         _enemyDisplacement = enemyPlayer.transform.position.x - _transform.position.x;
         

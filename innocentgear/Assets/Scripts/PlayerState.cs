@@ -72,6 +72,8 @@ public class PlayerState : MonoBehaviour
     {
         _spriteRenderer.color = Color.green;
         
+        _playerMovement.SetMovement(false);
+        
         StartCoroutine(WaitForFrames(move.startupFrames, () => Active(move)));
     }
 
@@ -116,6 +118,7 @@ public class PlayerState : MonoBehaviour
     {
         _spriteRenderer.color = Color.white;
         
+        _playerMovement.SetMovement(true);
         _playerMovement.enabled = true;
         _normals.enabled = true;
         _blocking.SetBlock(true);
