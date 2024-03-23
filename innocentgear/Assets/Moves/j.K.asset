@@ -21,3 +21,4 @@ MonoBehaviour:
   isLow: 0
   isHigh: 1
   damage: 30
+  level: 1

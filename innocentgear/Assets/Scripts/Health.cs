@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
+    [SerializeField] private GameOverScreen gameOverScreen;
     [SerializeField] private Slider slider;
     [SerializeField] private Gradient gradient;
     [SerializeField] private Image fill;
@@ -63,7 +64,8 @@ public class Health : MonoBehaviour
         
         if (_health <= 0)
         {
-            _health = 0;
+            bool winner = gameObject.name == "Player2";
+            gameOverScreen.RoundOver(winner);
         }
     }
 }
