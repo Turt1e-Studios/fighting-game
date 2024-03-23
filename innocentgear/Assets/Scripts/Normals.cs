@@ -10,6 +10,7 @@ public class Normals : MonoBehaviour
     [Header("Attacks")]
     [SerializeField] private AttackMove fiveP;
     [SerializeField] private AttackMove twoP;
+    [SerializeField] private AttackMove jumpP;
 
     private PlayerInput _playerInput;
     private PlayerState _playerState;
@@ -38,6 +39,13 @@ public class Normals : MonoBehaviour
                 {
                     _playerState.Move(twoP);
                 }
+            }
+        }
+        else
+        {
+            if (Input.GetKeyDown(punchKey))
+            {
+                _playerState.Move(jumpP);
             }
         }
     }

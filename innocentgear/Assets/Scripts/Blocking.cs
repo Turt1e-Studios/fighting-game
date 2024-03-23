@@ -17,12 +17,14 @@ public class Blocking : MonoBehaviour
     private bool _highBlock;
     private bool _isBlocking;
     private Frames _frames;
+    private Health _health;
     
     // Start is called before the first frame update
     void Start()
     {
         _playerInput = GetComponent<PlayerInput>();
         _frames = GameObject.Find("GameManager").GetComponent<Frames>();
+        _health = GetComponent<Health>();
         
         standingBoxes.SetActive(true);
         crouchingBoxes.SetActive(false);
@@ -80,7 +82,7 @@ public class Blocking : MonoBehaviour
     {
         if (move.isHigh && !_highBlock || move.isLow && !_lowBlock)
         {
-            GetHit(move.activeFrames + move.recoveryFrames + move.onHit);
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit, move.damage);
         }
         else if (_isBlocking)
         {
@@ -88,14 +90,14 @@ public class Blocking : MonoBehaviour
         }
         else
         {
-            GetHit(move.activeFrames + move.recoveryFrames + move.onHit);
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit, move.damage);
         }
     }
 
-    private void GetHit(int hitstun)
+    private void GetHit(int hitstun, int damage)
     {
         DisableControls();
-        
+        _health.Damage(damage);
         _spriteRenderer.color = Color.gray;
         StartCoroutine(WaitForFrames(hitstun, ReEnable));
     }
