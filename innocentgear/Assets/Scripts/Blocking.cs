@@ -87,18 +87,23 @@ public class Blocking : MonoBehaviour
         if (move.isHigh && !_highBlock || move.isLow && !_lowBlock)
         {
             print(HitFramesFromLevel(move.level));
-            GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitFramesFromLevel(move.level), move.damage, opponentGrounded);
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitStop(move.level), move.damage, opponentGrounded);
         }
         else if (_isBlocking)
         {
             print(BlockFramesFromLevel(move.level));
-            GetBlocked(move.activeFrames + move.recoveryFrames + move.onBlock + BlockFramesFromLevel(move.level));
+            GetBlocked(move.activeFrames + move.recoveryFrames + move.onBlock);
         }
         else
         {
             print(HitFramesFromLevel(move.level));
-            GetHit(move.activeFrames + move.recoveryFrames + move.onHit, move.damage + HitFramesFromLevel(move.level), opponentGrounded);
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit, move.damage + HitStop(move.level), opponentGrounded);
         }
+    }
+
+    private int HitStop(int level)
+    {
+        return 11 + level;
     }
 
     private int HitFramesFromLevel(int level)

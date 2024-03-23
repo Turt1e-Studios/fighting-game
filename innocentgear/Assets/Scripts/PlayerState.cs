@@ -22,6 +22,7 @@ public class PlayerState : MonoBehaviour
     private String _enemyLayer;
     private AttackMove _currentMove;
     private bool _alreadyHit;
+    private int _hitstop;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +49,7 @@ public class PlayerState : MonoBehaviour
                     print("touching enemy layer " + _enemyLayer);
                     _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock(_currentMove, transform.position.y <= -1f);
                     _alreadyHit = true;
+                    _hitstop = 11 + _currentMove.level;
                     break;
                 }
             }
@@ -132,7 +134,7 @@ public class PlayerState : MonoBehaviour
         
         _boxes.transform.Find("Sprite").GetComponent<SpriteRenderer>().color = Color.blue;
         
-        StartCoroutine(WaitForFrames(move.recoveryFrames, ResetState));
+        StartCoroutine(WaitForFrames(move.recoveryFrames + _hitstop, ResetState));
     }
 
     // Reset the state of the player to normal after attack is over.
