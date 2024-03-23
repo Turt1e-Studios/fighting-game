@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// An object that can be used to hold information about an attack.
 [CreateAssetMenu]
 public class AttackMove : ScriptableObject
 {

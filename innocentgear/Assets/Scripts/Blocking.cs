@@ -1,7 +1,9 @@
 using UnityEngine;
 
+// Determines blocking behavior.
 public class Blocking : MonoBehaviour
 {
+    [Header("Boxes")]
     [SerializeField] private GameObject standingBoxes;
     [SerializeField] private GameObject crouchingBoxes;
     
@@ -16,12 +18,15 @@ public class Blocking : MonoBehaviour
     void Start()
     {
         _playerInput = GetComponent<PlayerInput>();
+        
         standingBoxes.SetActive(true);
         crouchingBoxes.SetActive(false);
         _activeBoxes = standingBoxes;
+        
         _canBlock = true;
     }
 
+    // Returns the normal boxes that are currently being used by the player
     public GameObject GetCurrentBoxes()
     {
         return _activeBoxes;
@@ -31,8 +36,9 @@ public class Blocking : MonoBehaviour
     void Update()
     {
         _spriteRenderer = _activeBoxes.transform.Find("Sprite").GetComponent<SpriteRenderer>();
-        if (!_canBlock) return;
-        if (_playerInput.CurrentDirection is 1 or 2)
+        
+        if (!_canBlock) return; // Needs to be able to block
+        if (_playerInput.CurrentDirection is 1 or 2) // Low blocked
         {
             standingBoxes.SetActive(false);
             crouchingBoxes.SetActive(true);
@@ -41,7 +47,7 @@ public class Blocking : MonoBehaviour
             _lowBlock = true;
             _highBlock = false;
         }
-        else if (_playerInput.CurrentDirection is 4 or 7)
+        else if (_playerInput.CurrentDirection is 4 or 7) // High blocked
         {
             standingBoxes.SetActive(true);
             crouchingBoxes.SetActive(false);
@@ -50,7 +56,7 @@ public class Blocking : MonoBehaviour
             _lowBlock = false;
             _highBlock = true;
         }
-        else
+        else // Not blocked
         {
             standingBoxes.SetActive(true);
             crouchingBoxes.SetActive(false);
@@ -61,11 +67,13 @@ public class Blocking : MonoBehaviour
         }
     }
     
+    // Player recieves and checks and attack
     public void RecieveBlock()
     {
         print("got hit!");
     }
 
+    // Prevents regular hitboxes from interfering when a player attacks
     public void SetBlock(bool block)
     {
         _canBlock = block;

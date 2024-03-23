@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+// Controls state of player when performing an attack.
 public class PlayerState : MonoBehaviour
 {
+    [Header("Misc Player Info")]
     [SerializeField] private bool isPlayerOne;
     [SerializeField] private Color enemyColor;
     
@@ -26,25 +28,28 @@ public class PlayerState : MonoBehaviour
         _playerMovement = GetComponent<PlayerMovement>();
         _normals = GetComponent<Normals>();
         _blocking = GetComponent<Blocking>();
+        
         _enemyLayer = isPlayerOne ? "Hurtbox2" : "Hurtbox";
     }
     
     void Update()
     {
-        // Other way to do this in the coroutine method was not consistent. This way is slightly inefficient however.
+        // Activates when hitbox hits an enemy hurtbox.
         if (_hitboxActive && _hitbox.IsTouchingLayers(LayerMask.GetMask(_enemyLayer)))
         {
             _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock();
         }
     }
     
+    // Command to attack is activated
     public void Move(AttackMove move)
     {
-        //_playerMovement.enabled = false;
         _blockingBoxes = _blocking.GetCurrentBoxes();
         _spriteRenderer = _blockingBoxes.transform.Find("Sprite").GetComponent<SpriteRenderer>();
-        _normals.enabled = false; // Just disables the script, there could be a better way to disable them.
+        
+        _normals.enabled = false;
         _blocking.SetBlock(false);
+        
         Startup(move);
     }
 
@@ -52,42 +57,39 @@ public class PlayerState : MonoBehaviour
     void Startup(AttackMove move)
     {
         _spriteRenderer.color = Color.green;
+        
         StartCoroutine(WaitForFrames(move.startupFrames, () => Active(move)));
     }
 
     // Frames where attack is active
     void Active(AttackMove move)
     {
-        //_spriteRenderer.color = Color.red;
-        // Just did this because didn't want to deal with changing the colors of the hexagons when creating active hitbox
-        // prefabs. Definitely could otherwise just change its color via script depending on what player it is.
-
-        //Time.timeScale = 0;
+        // Activate the hitbox boxes
         _blockingBoxes.SetActive(false);
-        _boxes = Instantiate(move.boxes, transform.position, transform.rotation);
-        //currentAppearance.transform.Find("Sprite").GetComponent<SpriteRenderer>().color = Color.red;
-        //Time.timeScale = 0;
-        
+        var transform1 = transform;
+        _boxes = Instantiate(move.boxes, transform1.position, transform1.rotation);
         _boxes.transform.SetParent(transform);
+        
+        // Change player appearance
         if (!isPlayerOne)
         {
             _boxes.transform.Find("Hexagon Flat-Top").GetComponent<SpriteRenderer>().color = enemyColor;
         }
-        
-        
         _playerMovement.FlipHitboxModel();
         
+        // Set hitbox to be active so that it can be checked in the Update method
         _hitboxActive = true;
         _hitbox = _boxes.transform.Find("Hitbox").GetComponent<Collider2D>();
 
         StartCoroutine(WaitForFrames(move.activeFrames, () => Recovery(move)));
     }
 
-    // Frames where player cannot do anything
+    // Frames where player cannot do anything after an attack
     void Recovery(AttackMove move)
     {
         _spriteRenderer.color = Color.blue;
         
+        // Remove hitbox again and get normal hurtbox
         Destroy(_boxes);
         _blockingBoxes.SetActive(true);
         _hitboxActive = false;
@@ -95,9 +97,11 @@ public class PlayerState : MonoBehaviour
         StartCoroutine(WaitForFrames(move.recoveryFrames, ResetState));
     }
 
+    // Reset the state of the player to normal after attack is over.
     void ResetState()
     {
         _spriteRenderer.color = Color.white;
+        
         _playerMovement.enabled = true;
         _normals.enabled = true;
         _blocking.SetBlock(true);

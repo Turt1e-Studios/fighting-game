@@ -1,9 +1,8 @@
 using UnityEngine;
 
+// The sysetem of frames that are used to keep track of player states.
 public class Frames : MonoBehaviour
 {
-    // Can make this class static.
-    
     public int CurrentFrame { get; private set; }
 
     private const int FPS = 60; // Do not change this
@@ -16,7 +15,7 @@ public class Frames : MonoBehaviour
         //Time.fixedDeltaTime = 0.01666667f; // Set fixed update to 60 FPS.
     }
 
-    // Update is called once per frame
+    // Update the current frame
     void Update()
     {
         float elapsedTime = Time.time - _startTime;

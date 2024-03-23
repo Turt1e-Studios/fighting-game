@@ -1,14 +1,17 @@
 using UnityEngine;
 
+// Condenses player input into a single number.
 public class PlayerInput : MonoBehaviour
 {
     // See https://www.dustloop.com/w/Notation for fighting game notation
-
+    
+    [Header("Input Keys")]
     [SerializeField] private KeyCode upMovementKey;
     [SerializeField] private KeyCode downMovementKey;
     [SerializeField] private KeyCode leftMovementKey;
     [SerializeField] private KeyCode rightMovementKey;
-        
+    
+    // Property of the current direction of the player
     public int CurrentDirection { get; private set; }
 
     // Update is called once per frame
@@ -62,6 +65,7 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
+    // Change direction readings after players switch sides
     public void ChangeDirection()
     {
         (leftMovementKey, rightMovementKey) = (rightMovementKey, leftMovementKey);

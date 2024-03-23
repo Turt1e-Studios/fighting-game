@@ -1,16 +1,16 @@
 using UnityEngine;
 
+// Controls the activation of the player's regular attacks.
 public class Normals : MonoBehaviour
 {
     // See https://www.dustloop.com/w/Notation for fighting game notation
-
-    //[SerializeField] private BoxCollider2D[] attackHitboxes;
+    
+    [Header("Keys")]
     [SerializeField] private KeyCode punchKey;
-
+    [Header("Attacks")]
     [SerializeField] private AttackMove fiveP;
     [SerializeField] private AttackMove twoP;
-    // Order of hitboxes: 5P
-    
+
     private PlayerInput _playerInput;
     private PlayerState _playerState;
     private PlayerMovement _playerMovement;

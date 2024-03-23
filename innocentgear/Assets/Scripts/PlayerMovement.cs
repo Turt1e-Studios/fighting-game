@@ -3,9 +3,13 @@ using System.Collections;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 
+// Controls the general movement of the player.
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Player")]
     [SerializeField] private GameObject enemyPlayer;
+    [SerializeField] private bool isPlayerOne;
+    [Header("Movement Values")]
     [SerializeField] private float runSpeed;
     [SerializeField] private float sprintSpeed;
     [SerializeField] private float jumpSpeed;
@@ -16,11 +20,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float airDashBackwardsDuration = 0.2f;
     [SerializeField] private float airDashForwardsDuration = 0.4f;
     [SerializeField] private float superJumpSpeed;
+    [Header("Movement Keys")]
     [SerializeField] private KeyCode upMovementKey;
     [SerializeField] private KeyCode downMovementKey;
     [SerializeField] private KeyCode leftMovementKey;
     [SerializeField] private KeyCode rightMovementKey;
-    [SerializeField] private bool isPlayerOne;
+    
 
     private const float DelayBetweenPresses = 0.25f;
     private Rigidbody2D _rigidbody2D;
@@ -39,16 +44,18 @@ public class PlayerMovement : MonoBehaviour
     private bool _superJumpRight;
     private String _player;
     private float _oppositeDirectionMultiplier = 1;
-    private bool _isFlipped; // Default is towards the right
-    private float _enemyDisplacement; // To enemy
+    private bool _isFlipped;
+    private float _enemyDisplacement;
     private PlayerInput _playerInput;
     private Transform _transform;
 
+    // Returns whether the player is grounded
     public bool IsGrounded()
     {
         return _isGrounded;
     }
 
+    // Returns the enemy player object
     public GameObject GetEnemy()
     {
         return enemyPlayer;
@@ -59,6 +66,8 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerInput = GetComponent<PlayerInput>();
         _transform = GetComponent<Transform>();
+        
+        // Set information based on which player it is
         _player = isPlayerOne ? "Horizontal1" : "Horizontal2";
         _enemyDisplacement = isPlayerOne ? 1f : -1f;
         if (!isPlayerOne)
@@ -67,23 +76,25 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Flip the controls, movement, and appearance of the player
     private void FlipControls()
     {
-        _isFlipped = !_isFlipped; // set public flip variable
-        (leftMovementKey, rightMovementKey) = (rightMovementKey, leftMovementKey); // flip controls
-        _oppositeDirectionMultiplier *= -1; // flip direction of movement
+        _isFlipped = !_isFlipped;
+        (leftMovementKey, rightMovementKey) = (rightMovementKey, leftMovementKey);
+        _oppositeDirectionMultiplier *= -1;
         _playerInput.ChangeDirection();
-        // localScale instead of spriteRenderer to also affect children
         Vector3 flippedScale = _transform.localScale;
         flippedScale.x *= -1;
         _transform.localScale = flippedScale;
     }
     
+    // Check whether two numbers have opposite signs
     private bool OppositeSigns(float x, float y)
     {
         return x < 0? y >= 0: y < 0;
     }
 
+    // Only flip the model of the player
     public void FlipHitboxModel()
     {
         if (_isFlipped)
@@ -94,23 +105,21 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Flip controls if players switch sides
     private void CheckFlipControls()
     {
         if (OppositeSigns(enemyPlayer.transform.position.x - _transform.position.x, _enemyDisplacement))
         {
             FlipControls();
-            print("flipped controls");
         }
     }
 
     void Update()
     {
         CheckFlipControls();
-
         _enemyDisplacement = enemyPlayer.transform.position.x - _transform.position.x;
-
         
-        // Check for double presses
+        // Check for various double press commands
         if (_isGrounded)
         {
             CheckDoublePress(rightMovementKey, () => _sprinting = true, () => _sprinting = false);
@@ -148,7 +157,7 @@ public class PlayerMovement : MonoBehaviour
         }
         _transform.Translate(Time.deltaTime * (moveSpeed *  _velocity + _changeInVelocity));
 
-        // Check for jumps, on ground or double jumping
+        // Check for jumps on the ground or in the air
         if (Input.GetKeyDown(upMovementKey) && (_isGrounded || !_usedAirMove))
         {
             if (!_isGrounded)
@@ -166,12 +175,14 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(ResetVelocity(groundDashDuration));
     }
     
+    // Reset the player's velocity after a certain amount of time
     private IEnumerator ResetVelocity (float interval)
     {
         yield return new WaitForSeconds(interval);
         _rigidbody2D.velocity = new Vector2(0, 0);
     }
 
+    // Super jump command
     void SuperJump()
     {
         if (_usedAirMove) return;
@@ -179,12 +190,10 @@ public class PlayerMovement : MonoBehaviour
         Vector2 direction = Vector2.up.normalized;
         if (_superJumpLeft)
         {
-            //print("super jump left.");
             direction = (Vector2.left * _oppositeDirectionMultiplier + Vector2.up).normalized;
         }
         else if (_superJumpRight)
         {
-            //print("super jump right.");
             direction = (Vector2.right * _oppositeDirectionMultiplier + Vector2.up).normalized;
         }
         _rigidbody2D.AddForce(direction * superJumpSpeed, ForceMode2D.Impulse);
@@ -195,6 +204,7 @@ public class PlayerMovement : MonoBehaviour
         _usedAirMove = true;
     }
 
+    // Air dash backwards command
     void AirDashBackwards()
     {
         if (_airDashed) return;
@@ -204,6 +214,7 @@ public class PlayerMovement : MonoBehaviour
         _airDashed = true;
     }
 
+    // Air dash forwards command
     void AirDashForwards()
     {
         if (_airDashed) return;
@@ -220,7 +231,7 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
-    // Player enters the ground
+    // Reset variables after hitting the ground again
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag(("Ground")))
@@ -276,10 +287,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     
+    // Perform a command after two consecutive key presses
     void CheckPreviousKey(KeyCode key, KeyCode previousKey, Action action, Action negativeAction = null)
     {
-        //print(key + " " + previousKey + " " + action);
-
         if (Input.GetKeyDown(previousKey))
         {
             _previousKey = previousKey;
@@ -287,17 +297,14 @@ public class PlayerMovement : MonoBehaviour
             _lastPressedTime = Time.time;
             return;
         }
-
+        
         if (Input.GetKeyDown(key))
         {
-            //print(_pressedFirstTime + " " + (_previousKey == previousKey) + " " + (Time.time - _lastPressedTime <= DelayBetweenPresses));
-
             if (_pressedFirstTime && _previousKey != previousKey)
             {
                 _pressedFirstTimeDouble = false;
             }
             
-            // If already pressed and second time hit within time limit
             if (_pressedFirstTimeDouble && Time.time - _lastPressedTime <= DelayBetweenPresses)
             {
                 action();
@@ -306,7 +313,6 @@ public class PlayerMovement : MonoBehaviour
             else // Hit the first time normally
             {
                 _pressedFirstTimeDouble = true;
-                //_previousKey = key;
             }
             _lastPressedTime = Time.time;
         }
