@@ -66,7 +66,7 @@ public class Normals : MonoBehaviour
             }
             else if (Input.GetKeyDown(kickKey))
             {
-                if (_playerInput.CurrentDirection is 5 or 4)
+                if (_playerInput.CurrentDirection is 6 or 5 or 4)
                 {
                     _playerState.Move(fiveK);
                 }
@@ -114,7 +114,7 @@ public class Normals : MonoBehaviour
             }
             else if (Input.GetKeyDown(dustKey))
             {
-                if (_playerInput.CurrentDirection is 5 or 4)
+                if (_playerInput.CurrentDirection is 6 or 5 or 4)
                 {
                     _playerState.Move(fiveD);
                 }
