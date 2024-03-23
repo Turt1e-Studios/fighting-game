@@ -12,6 +12,8 @@ public class GameOverScreen : MonoBehaviour
     [SerializeField] private TextMeshProUGUI winText;
     [SerializeField] private GameObject player1;
     [SerializeField] private GameObject player2;
+    [SerializeField] private List<GameObject> hearts1;
+    [SerializeField] private List<GameObject> hearts2;
 
     private int _p1Lives = 2;
     private int _p2Lives = 2;
@@ -37,11 +39,14 @@ public class GameOverScreen : MonoBehaviour
         {
             print("p2 lives decreasing");
             _p2Lives--;
+            Destroy(hearts2[_p2Lives]);
         }
         else
         {
             print("p1 lives decreasing");
             _p1Lives--;
+            Destroy(hearts1[_p1Lives]);
+            //hearts1.RemoveAt(_p1Lives - 1);
         }
 
         if (_p1Lives <= 0 || _p2Lives <= 0)
