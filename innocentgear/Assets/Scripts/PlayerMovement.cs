@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerInput = GetComponent<PlayerInput>();
         _transform = GetComponent<Transform>();
-        
+
         // Set information based on which player it is
         _player = isPlayerOne ? "Horizontal1" : "Horizontal2";
         _enemyDisplacement = isPlayerOne ? 1f : -1f;

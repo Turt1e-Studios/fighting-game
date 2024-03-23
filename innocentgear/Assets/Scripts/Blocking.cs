@@ -80,7 +80,7 @@ public class Blocking : MonoBehaviour
     {
         if (move.isHigh && !_highBlock || move.isLow && !_lowBlock)
         {
-            GetHit();
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit);
         }
         else if (_isBlocking)
         {
@@ -88,28 +88,40 @@ public class Blocking : MonoBehaviour
         }
         else
         {
-            GetHit();
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit);
         }
     }
 
-    private void GetHit()
+    private void GetHit(int hitstun)
     {
-        print("got hit");
+        DisableControls();
+        
+        _spriteRenderer.color = Color.gray;
+        StartCoroutine(WaitForFrames(hitstun, ReEnable));
     }
 
     private void GetBlocked(int blockstun)
     {
+        DisableControls();
+        
         _spriteRenderer.color = Color.yellow;
-        print("blockstun for " + blockstun);
+        StartCoroutine(WaitForFrames(blockstun, ReEnable));
+    }
+
+    private void DisableControls()
+    {
+        SetBlock(false);
         GetComponent<PlayerMovement>().enabled = false;
         GetComponent<Normals>().enabled = false;
-        StartCoroutine(WaitForFrames(blockstun, ReEnable));
+        GetComponent<PlayerState>().enabled = false;
     }
 
     private void ReEnable()
     {
+        SetBlock(true);
         GetComponent<PlayerMovement>().enabled = true;
         GetComponent<Normals>().enabled = true;
+        GetComponent<PlayerState>().enabled = true;
     }
 
     // Prevents regular hitboxes from interfering when a player attacks

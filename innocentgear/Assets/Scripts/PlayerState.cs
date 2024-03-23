@@ -20,6 +20,7 @@ public class PlayerState : MonoBehaviour
     private GameObject _blockingBoxes;
     private String _enemyLayer;
     private AttackMove _currentMove;
+    private bool _alreadyHit;
 
     // Start is called before the first frame update
     void Start()
@@ -36,16 +37,19 @@ public class PlayerState : MonoBehaviour
     void Update()
     {
         // Activates when hitbox hits an enemy hurtbox.
-        if (_hitboxActive && _hitbox.IsTouchingLayers(LayerMask.GetMask(_enemyLayer)))
+        if (_hitboxActive && _hitbox.IsTouchingLayers(LayerMask.GetMask(_enemyLayer)) && !_alreadyHit)
         {
             _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock(_currentMove);
+            _alreadyHit = true;
         }
     }
     
     // Command to attack is activated
     public void Move(AttackMove move)
     {
+        // Already hit to prevent multiple damage instances
         _currentMove = move;
+        _alreadyHit = false;
         
         _blockingBoxes = _blocking.GetCurrentBoxes();
         _spriteRenderer = _blockingBoxes.transform.Find("Sprite").GetComponent<SpriteRenderer>();
