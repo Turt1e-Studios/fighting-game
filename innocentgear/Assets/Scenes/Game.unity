@@ -1770,6 +1770,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerOne: 0
   enemyColor: {r: 0.48235297, g: 0.5294118, b: 0.9921569, a: 0}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &833175651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1858,7 +1861,7 @@ MonoBehaviour:
   enemyPlayer: {fileID: 1220494826}
   isPlayerOne: 0
   runSpeed: 6
-  sprintSpeed: 14
+  sprintSpeed: 16
   jumpSpeed: 45
   groundDashSpeed: 22
   backwardsAirDashSpeed: 30
@@ -2976,7 +2979,7 @@ MonoBehaviour:
   enemyPlayer: {fileID: 833175648}
   isPlayerOne: 1
   runSpeed: 6
-  sprintSpeed: 14
+  sprintSpeed: 16
   jumpSpeed: 45
   groundDashSpeed: 22
   backwardsAirDashSpeed: 30
@@ -3076,6 +3079,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerOne: 1
   enemyColor: {r: 0.48235297, g: 0.5294118, b: 0.9921569, a: 0}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &1220494836
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ public class PlayerState : MonoBehaviour
     [Header("Misc Player Info")]
     [SerializeField] private bool isPlayerOne;
     [SerializeField] private Color enemyColor;
+    [SerializeField] private LayerMask enemyLayer;
     
     private SpriteRenderer _spriteRenderer;
     private PlayerMovement _playerMovement;
@@ -39,10 +40,12 @@ public class PlayerState : MonoBehaviour
         // Activates when hitbox hits an enemy hurtbox.
         if (_hitboxActive && !_alreadyHit)
         {
+            print("activated against " + _enemyLayer);
             foreach (Collider2D hitbox in _hitboxes)
             {
-                if (hitbox.IsTouchingLayers(LayerMask.GetMask(_enemyLayer)))
+                if (hitbox.IsTouchingLayers(enemyLayer))
                 {
+                    print("touching enemy layer " + _enemyLayer);
                     _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock(_currentMove);
                     _alreadyHit = true;
                     break;
@@ -97,6 +100,15 @@ public class PlayerState : MonoBehaviour
         _boxes = Instantiate(move.boxes, transform1.position, transform1.rotation);
         _boxes.transform.SetParent(transform);
         
+        // Make player two be able to be hit during attack
+        if (!isPlayerOne)
+        {
+            foreach (Transform child in _boxes.transform.Find("Hurtbox").transform)
+            {
+                child.gameObject.layer = LayerMask.NameToLayer("Hurtbox2");
+            }
+        }
+        
         // Change player appearance
         if (!isPlayerOne)
         {
@@ -114,12 +126,11 @@ public class PlayerState : MonoBehaviour
     // Frames where player cannot do anything after an attack
     void Recovery(AttackMove move)
     {
-        _spriteRenderer.color = Color.blue;
-        
         // Remove hitbox again and get normal hurtbox
-        Destroy(_boxes);
-        _blockingBoxes.SetActive(true);
+        Destroy(_boxes.transform.Find("Hitbox").gameObject);
         _hitboxActive = false;
+        
+        _boxes.transform.Find("Sprite").GetComponent<SpriteRenderer>().color = Color.blue;
         
         StartCoroutine(WaitForFrames(move.recoveryFrames, ResetState));
     }
@@ -128,6 +139,9 @@ public class PlayerState : MonoBehaviour
     void ResetState()
     {
         _spriteRenderer.color = Color.white;
+        
+        Destroy(_boxes);
+        _blockingBoxes.SetActive(true);
         
         _playerMovement.SetMovement(true);
         _playerMovement.enabled = true;

@@ -115,7 +115,7 @@ public class Blocking : MonoBehaviour
         SetBlock(false);
         GetComponent<PlayerMovement>().enabled = false;
         GetComponent<Normals>().enabled = false;
-        GetComponent<PlayerState>().enabled = false;
+        //GetComponent<PlayerState>().enabled = false;
     }
 
     private void ReEnable()
@@ -123,7 +123,7 @@ public class Blocking : MonoBehaviour
         SetBlock(true);
         GetComponent<PlayerMovement>().enabled = true;
         GetComponent<Normals>().enabled = true;
-        GetComponent<PlayerState>().enabled = true;
+        //GetComponent<PlayerState>().enabled = true;
     }
 
     // Prevents regular hitboxes from interfering when a player attacks
