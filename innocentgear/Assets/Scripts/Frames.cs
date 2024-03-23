@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 // The sysetem of frames that are used to keep track of player states.

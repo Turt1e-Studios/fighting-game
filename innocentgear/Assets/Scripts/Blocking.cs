@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 // Determines blocking behavior.
@@ -13,11 +15,14 @@ public class Blocking : MonoBehaviour
     private bool _canBlock;
     private bool _lowBlock;
     private bool _highBlock;
+    private bool _isBlocking;
+    private Frames _frames;
     
     // Start is called before the first frame update
     void Start()
     {
         _playerInput = GetComponent<PlayerInput>();
+        _frames = GameObject.Find("GameManager").GetComponent<Frames>();
         
         standingBoxes.SetActive(true);
         crouchingBoxes.SetActive(false);
@@ -46,6 +51,7 @@ public class Blocking : MonoBehaviour
             _spriteRenderer.color = Color.cyan;
             _lowBlock = true;
             _highBlock = false;
+            _isBlocking = true;
         }
         else if (_playerInput.CurrentDirection is 4 or 7) // High blocked
         {
@@ -55,6 +61,7 @@ public class Blocking : MonoBehaviour
             _spriteRenderer.color = Color.magenta;
             _lowBlock = false;
             _highBlock = true;
+            _isBlocking = true;
         }
         else // Not blocked
         {
@@ -64,18 +71,58 @@ public class Blocking : MonoBehaviour
             _spriteRenderer.color = Color.white;
             _lowBlock = false;
             _highBlock = false;
+            _isBlocking = false;
         }
     }
     
     // Player recieves and checks and attack
-    public void RecieveBlock()
+    public void RecieveBlock(AttackMove move)
     {
-        print("got hit!");
+        if (move.isHigh && !_highBlock || move.isLow && !_lowBlock)
+        {
+            GetHit();
+        }
+        else if (_isBlocking)
+        {
+            GetBlocked(move.activeFrames + move.recoveryFrames + move.onBlock);
+        }
+        else
+        {
+            GetHit();
+        }
+    }
+
+    private void GetHit()
+    {
+        print("got hit");
+    }
+
+    private void GetBlocked(int blockstun)
+    {
+        _spriteRenderer.color = Color.yellow;
+        print("blockstun for " + blockstun);
+        GetComponent<PlayerMovement>().enabled = false;
+        GetComponent<Normals>().enabled = false;
+        StartCoroutine(WaitForFrames(blockstun, ReEnable));
+    }
+
+    private void ReEnable()
+    {
+        GetComponent<PlayerMovement>().enabled = true;
+        GetComponent<Normals>().enabled = true;
     }
 
     // Prevents regular hitboxes from interfering when a player attacks
     public void SetBlock(bool block)
     {
         _canBlock = block;
+    }
+    
+    // Perform an action after a certain amount of frames.
+    private IEnumerator WaitForFrames(int frames, Action action)
+    {
+        int initialFrame = _frames.CurrentFrame;
+        yield return new WaitUntil(() => _frames.CurrentFrame - initialFrame > frames);
+        action();
     }
 }

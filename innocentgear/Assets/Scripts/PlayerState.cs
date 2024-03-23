@@ -19,6 +19,7 @@ public class PlayerState : MonoBehaviour
     private Blocking _blocking;
     private GameObject _blockingBoxes;
     private String _enemyLayer;
+    private AttackMove _currentMove;
 
     // Start is called before the first frame update
     void Start()
@@ -37,13 +38,15 @@ public class PlayerState : MonoBehaviour
         // Activates when hitbox hits an enemy hurtbox.
         if (_hitboxActive && _hitbox.IsTouchingLayers(LayerMask.GetMask(_enemyLayer)))
         {
-            _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock();
+            _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock(_currentMove);
         }
     }
     
     // Command to attack is activated
     public void Move(AttackMove move)
     {
+        _currentMove = move;
+        
         _blockingBoxes = _blocking.GetCurrentBoxes();
         _spriteRenderer = _blockingBoxes.transform.Find("Sprite").GetComponent<SpriteRenderer>();
         
@@ -108,7 +111,7 @@ public class PlayerState : MonoBehaviour
     }
     
     // Perform an action after a certain amount of frames.
-    IEnumerator WaitForFrames(int frames, Action action)
+    private IEnumerator WaitForFrames(int frames, Action action)
     {
         int initialFrame = _frames.CurrentFrame;
         yield return new WaitUntil(() => _frames.CurrentFrame - initialFrame > frames);
