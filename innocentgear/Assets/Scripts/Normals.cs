@@ -10,6 +10,7 @@ public class Normals : MonoBehaviour
     [SerializeField] private KeyCode kickKey;
     [SerializeField] private KeyCode slashKey;
     [SerializeField] private KeyCode heavyKey;
+    [SerializeField] private KeyCode dustKey;
     [Header("Attacks")]
     [SerializeField] private AttackMove fiveP;
     [SerializeField] private AttackMove twoP;
@@ -24,6 +25,9 @@ public class Normals : MonoBehaviour
     [SerializeField] private AttackMove fiveH;
     [SerializeField] private AttackMove twoH;
     [SerializeField] private AttackMove jumpH;
+    [SerializeField] private AttackMove fiveD;
+    [SerializeField] private AttackMove twoD;
+    [SerializeField] private AttackMove jumpD;
 
     private PlayerInput _playerInput;
     private PlayerState _playerState;
@@ -93,6 +97,17 @@ public class Normals : MonoBehaviour
                     _playerState.Move(twoH);
                 }
             }
+            else if (Input.GetKeyDown(dustKey))
+            {
+                if (_playerInput.CurrentDirection is 5 or 4)
+                {
+                    _playerState.Move(fiveD);
+                }
+                else if (_playerInput.CurrentDirection is 1 or 2 or 3)
+                {
+                    _playerState.Move(twoD);
+                }
+            }
         }
         else
         {
@@ -111,6 +126,10 @@ public class Normals : MonoBehaviour
             else if (Input.GetKeyDown(heavyKey))
             {
                 _playerState.Move(jumpH);
+            }
+            else if (Input.GetKeyDown(dustKey))
+            {
+                _playerState.Move(jumpD);
             }
         }
     }
