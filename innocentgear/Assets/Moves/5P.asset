@@ -17,3 +17,6 @@ MonoBehaviour:
   activeFrames: 5
   recoveryFrames: 9
   onBlock: -2
+  isLow: 0
+  isHigh: 0
+  hasStandingAppearance: 1

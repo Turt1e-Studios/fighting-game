@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerState : MonoBehaviour
 {
     [SerializeField] private bool isPlayerOne;
+    [SerializeField] private Color enemyColor;
     
     private SpriteRenderer _spriteRenderer;
     private PlayerMovement _playerMovement;
@@ -40,6 +41,8 @@ public class PlayerState : MonoBehaviour
     public void Move(AttackMove move)
     {
         //_playerMovement.enabled = false;
+        _blockingBoxes = _blocking.GetCurrentBoxes();
+        _spriteRenderer = _blockingBoxes.transform.Find("Sprite").GetComponent<SpriteRenderer>();
         _normals.enabled = false; // Just disables the script, there could be a better way to disable them.
         _blocking.SetBlock(false);
         Startup(move);
@@ -55,13 +58,22 @@ public class PlayerState : MonoBehaviour
     // Frames where attack is active
     void Active(AttackMove move)
     {
-        _spriteRenderer.color = Color.red;
+        //_spriteRenderer.color = Color.red;
+        // Just did this because didn't want to deal with changing the colors of the hexagons when creating active hitbox
+        // prefabs. Definitely could otherwise just change its color via script depending on what player it is.
 
         //Time.timeScale = 0;
-        _blockingBoxes = _blocking.GetCurrentBoxes();
         _blockingBoxes.SetActive(false);
         _boxes = Instantiate(move.boxes, transform.position, transform.rotation);
+        //currentAppearance.transform.Find("Sprite").GetComponent<SpriteRenderer>().color = Color.red;
+        //Time.timeScale = 0;
+        
         _boxes.transform.SetParent(transform);
+        if (!isPlayerOne)
+        {
+            _boxes.transform.Find("Hexagon Flat-Top").GetComponent<SpriteRenderer>().color = enemyColor;
+        }
+        
         
         _playerMovement.FlipHitboxModel();
         
