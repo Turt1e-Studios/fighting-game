@@ -59,6 +59,7 @@ public class Health : MonoBehaviour
 
         slider.value = _health;
         //fill.color = gradient.Evaluate(slider.normalizedValue);
+        print(_health);
         
         if (_health <= 0)
         {

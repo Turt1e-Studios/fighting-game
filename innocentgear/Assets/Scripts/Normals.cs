@@ -7,10 +7,12 @@ public class Normals : MonoBehaviour
     
     [Header("Keys")]
     [SerializeField] private KeyCode punchKey;
+    [SerializeField] private KeyCode kickKey;
     [Header("Attacks")]
     [SerializeField] private AttackMove fiveP;
     [SerializeField] private AttackMove twoP;
     [SerializeField] private AttackMove jumpP;
+    [SerializeField] private AttackMove fiveK;
 
     private PlayerInput _playerInput;
     private PlayerState _playerState;
@@ -38,6 +40,13 @@ public class Normals : MonoBehaviour
                 else if (_playerInput.CurrentDirection is 1 or 2 or 3)
                 {
                     _playerState.Move(twoP);
+                }
+            }
+            else if (Input.GetKeyDown(kickKey))
+            {
+                if (_playerInput.CurrentDirection is 5 or 4)
+                {
+                    _playerState.Move(fiveK);
                 }
             }
         }

@@ -13,7 +13,7 @@ public class PlayerState : MonoBehaviour
     private PlayerMovement _playerMovement;
     private Normals _normals;
     private Frames _frames;
-    private Collider2D _hitbox;
+    private Collider2D[] _hitboxes;
     private bool _hitboxActive;
     private GameObject _boxes;
     private Blocking _blocking;
@@ -37,10 +37,17 @@ public class PlayerState : MonoBehaviour
     void Update()
     {
         // Activates when hitbox hits an enemy hurtbox.
-        if (_hitboxActive && _hitbox.IsTouchingLayers(LayerMask.GetMask(_enemyLayer)) && !_alreadyHit)
+        if (_hitboxActive && !_alreadyHit)
         {
-            _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock(_currentMove);
-            _alreadyHit = true;
+            foreach (Collider2D hitbox in _hitboxes)
+            {
+                if (hitbox.IsTouchingLayers(LayerMask.GetMask(_enemyLayer)))
+                {
+                    _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock(_currentMove);
+                    _alreadyHit = true;
+                    break;
+                }
+            }
         }
     }
     
@@ -86,7 +93,7 @@ public class PlayerState : MonoBehaviour
         
         // Set hitbox to be active so that it can be checked in the Update method
         _hitboxActive = true;
-        _hitbox = _boxes.transform.Find("Hitbox").GetComponent<Collider2D>();
+        _hitboxes = _boxes.transform.Find("Hitbox").GetComponentsInChildren<Collider2D>();
 
         StartCoroutine(WaitForFrames(move.activeFrames, () => Recovery(move)));
     }
