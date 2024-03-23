@@ -46,7 +46,7 @@ public class PlayerState : MonoBehaviour
                 if (hitbox.IsTouchingLayers(enemyLayer))
                 {
                     print("touching enemy layer " + _enemyLayer);
-                    _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock(_currentMove);
+                    _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock(_currentMove, transform.position.y <= -1f);
                     _alreadyHit = true;
                     break;
                 }

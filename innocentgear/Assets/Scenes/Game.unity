@@ -1756,6 +1756,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   standingBoxes: {fileID: 1675572752}
   crouchingBoxes: {fileID: 411759481}
+  horizontalKnockback: 100
+  verticalKnockback: 300
 --- !u!114 &833175650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3096,6 +3098,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   standingBoxes: {fileID: 1100345907}
   crouchingBoxes: {fileID: 1627769357}
+  horizontalKnockback: 100
+  verticalKnockback: 300
 --- !u!114 &1220494837
 MonoBehaviour:
   m_ObjectHideFlags: 0

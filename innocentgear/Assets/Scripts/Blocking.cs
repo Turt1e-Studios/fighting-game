@@ -8,10 +8,13 @@ public class Blocking : MonoBehaviour
     [Header("Boxes")]
     [SerializeField] private GameObject standingBoxes;
     [SerializeField] private GameObject crouchingBoxes;
+    [SerializeField] private float horizontalKnockback;
+    [SerializeField] private float verticalKnockback;
     
     private PlayerInput _playerInput;
     private GameObject _activeBoxes;
     private SpriteRenderer _spriteRenderer;
+    private PlayerMovement _playerMovement;
     private bool _canBlock;
     private bool _lowBlock;
     private bool _highBlock;
@@ -25,6 +28,7 @@ public class Blocking : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _frames = GameObject.Find("GameManager").GetComponent<Frames>();
         _health = GetComponent<Health>();
+        _playerMovement = GetComponent<PlayerMovement>();
         
         standingBoxes.SetActive(true);
         crouchingBoxes.SetActive(false);
@@ -78,11 +82,11 @@ public class Blocking : MonoBehaviour
     }
     
     // Player recieves and checks and attack
-    public void RecieveBlock(AttackMove move)
+    public void RecieveBlock(AttackMove move, bool opponentGrounded)
     {
         if (move.isHigh && !_highBlock || move.isLow && !_lowBlock)
         {
-            GetHit(move.activeFrames + move.recoveryFrames + move.onHit, move.damage);
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit, move.damage, opponentGrounded);
         }
         else if (_isBlocking)
         {
@@ -90,15 +94,17 @@ public class Blocking : MonoBehaviour
         }
         else
         {
-            GetHit(move.activeFrames + move.recoveryFrames + move.onHit, move.damage);
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit, move.damage, opponentGrounded);
         }
     }
 
-    private void GetHit(int hitstun, int damage)
+    private void GetHit(int hitstun, int damage, bool opponentGrounded)
     {
         DisableControls();
         _health.Damage(damage);
         _spriteRenderer.color = Color.gray;
+        float groundFactor = opponentGrounded ? 1 : 0; // only vertical knockback if grounded
+        GetComponent<Rigidbody2D>().AddForce(Mathf.Sqrt(damage) * new Vector2(-1 * _playerMovement.GetDisplacement() / Math.Abs(_playerMovement.GetDisplacement()) * horizontalKnockback, groundFactor * verticalKnockback));
         StartCoroutine(WaitForFrames(hitstun, ReEnable));
     }
 
