@@ -11,6 +11,7 @@ public class Health : MonoBehaviour
     [SerializeField] private Image fill;
     
     private int _health;
+    private bool _gameOver;
     
     // Start is called before the first frame update
     void Start()
@@ -62,10 +63,18 @@ public class Health : MonoBehaviour
         //fill.color = gradient.Evaluate(slider.normalizedValue);
         print(_health);
         
-        if (_health <= 0)
+        if (!_gameOver && _health <= 0)
         {
+            _gameOver = true;
             bool winner = gameObject.name == "Player2";
             gameOverScreen.RoundOver(winner);
         }
+    }
+
+    public void ResetHealth()
+    {
+        _health = 420;
+        slider.value = _health;
+        _gameOver = false;
     }
 }

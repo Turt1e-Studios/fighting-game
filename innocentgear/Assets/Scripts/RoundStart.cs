@@ -10,14 +10,22 @@ public class RoundStart : MonoBehaviour
     [SerializeField] private GameObject roundText;
     [SerializeField] private GameObject fightText;
 
+    private int _round = 1;
+
     // Start is called before the first frame update
     void Start()
     {
-        if (!PlayerPrefs.HasKey("Round"))
-        {
-            PlayerPrefs.SetInt("Round", 1);
-        }
-        numberText.text = "" + PlayerPrefs.GetInt("Round");
+        //if (!PlayerPrefs.HasKey("Round"))
+        //{
+            //PlayerPrefs.SetInt("Round", 1);
+        //}
+        //numberText.text = "" + PlayerPrefs.GetInt("Round");
+        StartRound();
+    }
+
+    public void StartRound()
+    {
+        numberText.text = "" + _round;
         roundText.SetActive(true);
         
         StartCoroutine(WaitForTime(2f, ActivateFightText));
@@ -39,6 +47,7 @@ public class RoundStart : MonoBehaviour
 
     public void IncreaseRound()
     {
-        PlayerPrefs.SetInt("Round", PlayerPrefs.GetInt("Round") + 1);
+        _round++;
+        //PlayerPrefs.SetInt("Round", PlayerPrefs.GetInt("Round") + 1);
     }
 }
