@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9e6f1bc1c11b1140b13be15825adc97, type: 3}
+  m_Name: 6H
+  m_EditorClassIdentifier: 
+  boxes: {fileID: 4381159050543156675, guid: f786959502269ff4fb6d2e6b30c19f1e, type: 3}
+  startupFrames: 9
+  activeFrames: 3
+  recoveryFrames: 43
+  onHit: 9
+  onBlock: -27
+  isLow: 0
+  isHigh: 0
+  damage: 60
