@@ -13,6 +13,8 @@ public class Normals : MonoBehaviour
     [SerializeField] private AttackMove twoP;
     [SerializeField] private AttackMove jumpP;
     [SerializeField] private AttackMove fiveK;
+    [SerializeField] private AttackMove twoK;
+    [SerializeField] private AttackMove jumpK;
 
     private PlayerInput _playerInput;
     private PlayerState _playerState;
@@ -48,6 +50,10 @@ public class Normals : MonoBehaviour
                 {
                     _playerState.Move(fiveK);
                 }
+                else if (_playerInput.CurrentDirection is 1 or 2 or 3)
+                {
+                    _playerState.Move(twoK);
+                }
             }
         }
         else
@@ -55,6 +61,10 @@ public class Normals : MonoBehaviour
             if (Input.GetKeyDown(punchKey))
             {
                 _playerState.Move(jumpP);
+            }
+            else if (Input.GetKeyDown(kickKey))
+            {
+                _playerState.Move(jumpK);
             }
         }
     }
