@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9e6f1bc1c11b1140b13be15825adc97, type: 3}
-  m_Name: 5K
+  m_Name: 2S
   m_EditorClassIdentifier: 
-  boxes: {fileID: 2897014219892523302, guid: 5cd94c9850fb12a4990954ee6f06ada0, type: 3}
-  startupFrames: 3
-  activeFrames: 4
-  recoveryFrames: 25
-  onHit: -13
-  onBlock: -16
+  boxes: {fileID: 1627417182263884377, guid: 3f4fe5416cf2d40458968b74b366bd9e, type: 3}
+  startupFrames: 10
+  activeFrames: 6
+  recoveryFrames: 15
+  onHit: -4
+  onBlock: -7
   isLow: 0
   isHigh: 0
-  damage: 28
+  damage: 34

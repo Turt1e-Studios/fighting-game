@@ -61,6 +61,11 @@ public class PlayerMovement : MonoBehaviour
         return enemyPlayer;
     }
 
+    public float GetDisplacement()
+    {
+        return _enemyDisplacement;
+    }
+
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
