@@ -172,7 +172,8 @@ public class PlayerState : MonoBehaviour
             _hitstop += HitstopFromCounter(_currentMove.level);
         }
         
-        StartCoroutine(WaitForFrames(move.recoveryFrames + _hitstop, ResetState));
+        // removed extra hitstop because it was too slow but can add it in back later
+        StartCoroutine(WaitForFrames(move.recoveryFrames, ResetState));
     }
 
     // Reset the state of the player to normal after attack is over.
