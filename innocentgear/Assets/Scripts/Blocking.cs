@@ -173,7 +173,7 @@ public class Blocking : MonoBehaviour
         _spriteRenderer.color = Color.gray;
 
         float groundFactor = opponentGrounded ? 1 : 0; // only vertical knockback if grounded
-        GetComponent<Rigidbody2D>().AddForce(knockbackMultiplier * Mathf.Sqrt((float) level) * new Vector2(-1 * _playerMovement.GetDisplacement() / Math.Abs(_playerMovement.GetDisplacement()) * horizontalKnockback, groundFactor * verticalKnockback));
+        GetComponent<Rigidbody2D>().AddForce(knockbackMultiplier * Mathf.Sqrt((float) damage / (level + 1)) * new Vector2(-1 * _playerMovement.GetDisplacement() / Math.Abs(_playerMovement.GetDisplacement()) * horizontalKnockback, groundFactor * verticalKnockback));
         StartCoroutine(WaitForFrames(hitstun + extraFrames, ReEnable));
     }
 
