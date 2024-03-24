@@ -22,3 +22,13 @@ MonoBehaviour:
   isHigh: 0
   damage: 44
   level: 4
+  gatlings:
+  - {fileID: 11400000, guid: add0011d9714c0d469504d90cc7c1c6d, type: 2}
+  - {fileID: 11400000, guid: 55844d97737323146b41dc667faf8b76, type: 2}
+  - {fileID: 11400000, guid: 2fa756e5e5185034a815363303e95ba6, type: 2}
+  - {fileID: 11400000, guid: ca272c803851adf43ac75532de822383, type: 2}
+  - {fileID: 11400000, guid: 1ae43ade51d7b3f4bad7a27075892e19, type: 2}
+  - {fileID: 11400000, guid: 5b944e41e94c6894aa46d95c8742202f, type: 2}
+  - {fileID: 11400000, guid: 4c6f6f718e84f664fa01ee60e93a823a, type: 2}
+  - {fileID: 11400000, guid: 4f6bab14bd1317841898edf053d63501, type: 2}
+  - {fileID: 11400000, guid: 7f73b3af2204dde488628b699ab4519e, type: 2}

@@ -17,4 +17,6 @@ public class AttackMove : ScriptableObject
 
     public int damage;
     public int level;
+
+    public AttackMove[] gatlings;
 }

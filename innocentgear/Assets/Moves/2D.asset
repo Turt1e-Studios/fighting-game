@@ -22,3 +22,4 @@ MonoBehaviour:
   isHigh: 0
   damage: 36
   level: 3
+  gatlings: []
