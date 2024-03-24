@@ -100,7 +100,7 @@ public class Blocking : MonoBehaviour
         else if ((move.isHigh && !_highBlock) || (move.isLow && !_lowBlock))
         {
             print("didn't block correctly");
-            GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitStop(move.level), move.damage, opponentGrounded, move.counterHit);
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitStop(move.level), move.damage, opponentGrounded, move.counterHit, move.level);
         }
         else if (_isBlocking && !move.isThrow && !move.isAirThrow)
         {
@@ -110,7 +110,7 @@ public class Blocking : MonoBehaviour
         else
         {
             print("didn't block");
-            GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitStop(move.level), move.damage + HitStop(move.level), opponentGrounded, move.counterHit);
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitStop(move.level), move.damage, opponentGrounded, move.counterHit, move.level);
         }
     }
 
@@ -153,7 +153,7 @@ public class Blocking : MonoBehaviour
         return _inCounterHit;
     }
 
-    private void GetHit(int hitstun, int damage, bool opponentGrounded, int counterHit)
+    private void GetHit(int hitstun, int damage, bool opponentGrounded, int counterHit, int level)
     {
         float multiplier = 1f;
         int extraFrames = 0;
@@ -173,7 +173,7 @@ public class Blocking : MonoBehaviour
         _spriteRenderer.color = Color.gray;
 
         float groundFactor = opponentGrounded ? 1 : 0; // only vertical knockback if grounded
-        GetComponent<Rigidbody2D>().AddForce(knockbackMultiplier * Mathf.Sqrt(damage) * new Vector2(-1 * _playerMovement.GetDisplacement() / Math.Abs(_playerMovement.GetDisplacement()) * horizontalKnockback, groundFactor * verticalKnockback));
+        GetComponent<Rigidbody2D>().AddForce(knockbackMultiplier * Mathf.Sqrt((float) level) * new Vector2(-1 * _playerMovement.GetDisplacement() / Math.Abs(_playerMovement.GetDisplacement()) * horizontalKnockback, groundFactor * verticalKnockback));
         StartCoroutine(WaitForFrames(hitstun + extraFrames, ReEnable));
     }
 
