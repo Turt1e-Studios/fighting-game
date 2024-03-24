@@ -28,14 +28,30 @@ public class RoundStart : MonoBehaviour
         numberText.text = "" + _round;
         roundText.SetActive(true);
         
+        SetMovement(false);
+
         StartCoroutine(WaitForTime(2f, ActivateFightText));
+    }
+
+    void SetMovement(bool set)
+    {
+        GameObject.Find("Player").GetComponent<PlayerMovement>().enabled = set;
+        GameObject.Find("Player").GetComponent<Normals>().enabled = set;
+        GameObject.Find("Player2").GetComponent<PlayerMovement>().enabled = set;
+        GameObject.Find("Player2").GetComponent<Normals>().enabled = set;
     }
 
     void ActivateFightText()
     {
         roundText.SetActive(false);
         fightText.SetActive(true);
-        StartCoroutine(WaitForTime(1f, () => fightText.SetActive(false)));
+        StartCoroutine(WaitForTime(1f, StartFight));
+    }
+
+    void StartFight()
+    {
+        fightText.SetActive(false);
+        SetMovement(true);
     }
     
     // Perform an action after a certain amount of frames.
