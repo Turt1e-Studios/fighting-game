@@ -9,6 +9,7 @@ public class RoundStart : MonoBehaviour
     [SerializeField] private TextMeshProUGUI numberText;
     [SerializeField] private GameObject roundText;
     [SerializeField] private GameObject fightText;
+    [SerializeField] private Clock clock;
 
     private int _round = 1;
 
@@ -27,7 +28,7 @@ public class RoundStart : MonoBehaviour
     {
         numberText.text = "" + _round;
         roundText.SetActive(true);
-        
+
         SetMovement(false);
 
         StartCoroutine(WaitForTime(2f, ActivateFightText));
@@ -52,6 +53,7 @@ public class RoundStart : MonoBehaviour
     {
         fightText.SetActive(false);
         SetMovement(true);
+        clock.SetStatus(true);
     }
     
     // Perform an action after a certain amount of frames.

@@ -154,7 +154,7 @@ public class Blocking : MonoBehaviour
             print("counter hit!");
             _inCounterHit = true;
             multiplier = 1.1f;
-            extraFrames = FrameAdvFromCounter(counterHit) + HitstopFromCounter(counterHit);
+            extraFrames = FrameAdvFromCounter(counterHit) + HitstopFromCounter(counterHit) + SlowdownFromCounter(counterHit);
             knockbackMultiplier = 1f + (float) FrameAdvFromCounter(counterHit) / 36;
             SlowDown(SlowdownFromCounter(counterHit));
         }

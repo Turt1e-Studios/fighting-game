@@ -14,6 +14,7 @@ public class GameOverScreen : MonoBehaviour
     [SerializeField] private GameObject player2;
     [SerializeField] private List<GameObject> hearts1;
     [SerializeField] private List<GameObject> hearts2;
+    [SerializeField] private Clock clock;
 
     private int _p1Lives = 2;
     private int _p2Lives = 2;
@@ -31,15 +32,14 @@ public class GameOverScreen : MonoBehaviour
         winScreen.SetActive(false);
     }
     
-    public void RoundOver(bool p1Winner)
+    public void RoundOver(bool p1Winner, bool draw = false)
     {
-
-        if (p1Winner)
+        if (p1Winner && !draw)
         {
             _p2Lives--;
             Destroy(hearts2[_p2Lives]);
         }
-        else
+        else if (!draw)
         {
             _p1Lives--;
             Destroy(hearts1[_p1Lives]);
@@ -50,12 +50,15 @@ public class GameOverScreen : MonoBehaviour
         {
             winScreen.SetActive(true);
             winText.text = _p1Lives <= 0 ? "PLAYER 2 WINS!" : "PLAYER 1 WINS!";
+            clock.SetStatus(false);
             return;
         }
 
         roundStart.IncreaseRound();
         gameObject.SetActive(true);
         
+        clock.SetStatus(false);
+
         StartCoroutine(WaitForTime(3f));
     }
 
@@ -68,6 +71,7 @@ public class GameOverScreen : MonoBehaviour
 
     private void ResetStage()
     {
+        clock.ResetClock();
         gameObject.SetActive(false);
         player1.transform.position = new Vector2(-4.32f, -1.49f);
         player2.transform.position = new Vector2(4.17f, -1.49f);
