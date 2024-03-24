@@ -37,6 +37,7 @@ public class Normals : MonoBehaviour
     private PlayerInput _playerInput;
     private PlayerState _playerState;
     private PlayerMovement _playerMovement;
+    private bool _didCloseS;
     
     // Start is called before the first frame update
     void Start()
@@ -81,13 +82,15 @@ public class Normals : MonoBehaviour
             {
                 if (_playerInput.CurrentDirection is 5 or 4)
                 {
-                    if (Mathf.Abs(_playerMovement.GetDisplacement()) < 3f)
+                    if (Mathf.Abs(_playerMovement.GetDisplacement()) < 3f && !_didCloseS)
                     {
                         _playerState.Move(cS);
+                        _didCloseS = true;
                     }
                     else
                     {
                         _playerState.Move(fS);
+                        _didCloseS = false;
                     }
                 }
                 else if (_playerInput.CurrentDirection is 1 or 2 or 3)
@@ -160,5 +163,11 @@ public class Normals : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void CompletedMove()
+    {
+        print("resetting close S");
+        _didCloseS = false;
     }
 }

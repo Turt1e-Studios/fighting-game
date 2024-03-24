@@ -77,7 +77,8 @@ public class PlayerState : MonoBehaviour
             }
             return;
         }
-        
+
+        if (move.boxes.name != "c.S") _normals.CompletedMove();
         _alreadyActivated = true;
         
         // Already hit to prevent multiple damage instances
