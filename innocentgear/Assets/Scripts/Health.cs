@@ -61,9 +61,7 @@ public class Health : MonoBehaviour
 
         slider.value = _health;
         //fill.color = gradient.Evaluate(slider.normalizedValue);
-        print(_health);
-        
-        print("gameover? " + _gameOver);
+
         if (!_gameOver && _health <= 0)
         {
             _gameOver = true;

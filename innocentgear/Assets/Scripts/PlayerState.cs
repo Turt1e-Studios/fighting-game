@@ -23,6 +23,9 @@ public class PlayerState : MonoBehaviour
     private AttackMove _currentMove;
     private bool _alreadyHit;
     private int _hitstop;
+    private bool _alreadyActivated;
+    private bool _hasGatling;
+    private AttackMove _gatlingMove;
 
     // Start is called before the first frame update
     void Start()
@@ -38,15 +41,14 @@ public class PlayerState : MonoBehaviour
     
     void Update()
     {
+        print(_hitboxActive + " " + _alreadyHit);
         // Activates when hitbox hits an enemy hurtbox.
         if (_hitboxActive && !_alreadyHit)
         {
-            print("activated against " + _enemyLayer);
             foreach (Collider2D hitbox in _hitboxes)
             {
                 if (hitbox.IsTouchingLayers(enemyLayer))
                 {
-                    print("touching enemy layer " + _enemyLayer);
                     _playerMovement.GetEnemy().GetComponent<Blocking>().RecieveBlock(_currentMove, transform.position.y <= -1f);
                     _alreadyHit = true;
                     _hitstop = 11 + _currentMove.level;
@@ -59,6 +61,20 @@ public class PlayerState : MonoBehaviour
     // Command to attack is activated
     public void Move(AttackMove move)
     {
+        if (_alreadyActivated)
+        {
+            //print("follow up move");
+            if (_currentMove.gatlings.Contains(move) && !_hasGatling)
+            {
+                //print("gatlinged move: " + move);
+                _hasGatling = true;
+                _gatlingMove = move;
+            }
+            return;
+        }
+        
+        _alreadyActivated = true;
+        
         // Already hit to prevent multiple damage instances
         _currentMove = move;
         _alreadyHit = false;
@@ -66,7 +82,7 @@ public class PlayerState : MonoBehaviour
         _blockingBoxes = _blocking.GetCurrentBoxes();
         _spriteRenderer = _blockingBoxes.transform.Find("Sprite").GetComponent<SpriteRenderer>();
         
-        _normals.enabled = false;
+        //_normals.enabled = false;
         _blocking.SetBlock(false);
         
         Startup(move);
@@ -131,6 +147,18 @@ public class PlayerState : MonoBehaviour
         // Remove hitbox again and get normal hurtbox
         Destroy(_boxes.transform.Find("Hitbox").gameObject);
         _hitboxActive = false;
+
+        // Skip recovery and go to gatling if it used
+        if (_hasGatling)
+        { 
+            //print("doing a gatling");
+            _hasGatling = false;
+            _alreadyActivated = false;
+            ResetState();
+            //_alreadyHit = true;
+            Move(_gatlingMove);
+            return;
+        }
         
         _boxes.transform.Find("Sprite").GetComponent<SpriteRenderer>().color = Color.blue;
         
@@ -141,13 +169,14 @@ public class PlayerState : MonoBehaviour
     void ResetState()
     {
         _spriteRenderer.color = Color.white;
-        
+
+        _alreadyActivated = false;
         Destroy(_boxes);
         _blockingBoxes.SetActive(true);
-        
+
         _playerMovement.SetMovement(true);
         _playerMovement.enabled = true;
-        _normals.enabled = true;
+        //_normals.enabled = true;
         _blocking.SetBlock(true);
     }
     

@@ -33,17 +33,14 @@ public class GameOverScreen : MonoBehaviour
     
     public void RoundOver(bool p1Winner)
     {
-        print(_p1Lives + " " + _p2Lives); 
-        
+
         if (p1Winner)
         {
-            print("p2 lives decreasing");
             _p2Lives--;
             Destroy(hearts2[_p2Lives]);
         }
         else
         {
-            print("p1 lives decreasing");
             _p1Lives--;
             Destroy(hearts1[_p1Lives]);
             //hearts1.RemoveAt(_p1Lives - 1);

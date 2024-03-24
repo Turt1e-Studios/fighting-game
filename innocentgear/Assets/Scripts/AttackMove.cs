@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // An object that can be used to hold information about an attack.
@@ -18,5 +19,5 @@ public class AttackMove : ScriptableObject
     public int damage;
     public int level;
 
-    public AttackMove[] gatlings;
+    public List<AttackMove> gatlings;
 }
