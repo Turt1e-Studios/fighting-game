@@ -22,5 +22,6 @@ MonoBehaviour:
   isHigh: 1
   damage: 30
   level: 1
+  counterHit: 1
   gatlings:
   - {fileID: 11400000, guid: fade2c3d124a4f745b26612a068b65e2, type: 2}

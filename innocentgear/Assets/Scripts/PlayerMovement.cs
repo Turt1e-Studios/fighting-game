@@ -342,5 +342,15 @@ public class PlayerMovement : MonoBehaviour
             negativeAction?.Invoke();
         }
     }
+
+    public void GravityDown()
+    {
+        _rigidbody2D.gravityScale /= 2;
+    }
+
+    public void GravityUp()
+    {
+        _rigidbody2D.gravityScale *= 2;
+    }
 }
 

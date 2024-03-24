@@ -38,10 +38,15 @@ public class PlayerState : MonoBehaviour
         
         _enemyLayer = isPlayerOne ? "Hurtbox2" : "Hurtbox";
     }
+
+    public bool IsRecovering()
+    {
+        return _alreadyActivated && !_hitboxActive;
+    }
     
     void Update()
     {
-        print(_hitboxActive + " " + _alreadyHit);
+        //print(_hitboxActive + " " + _alreadyHit);
         // Activates when hitbox hits an enemy hurtbox.
         if (_hitboxActive && !_alreadyHit)
         {
@@ -161,6 +166,11 @@ public class PlayerState : MonoBehaviour
         }
         
         _boxes.transform.Find("Sprite").GetComponent<SpriteRenderer>().color = Color.blue;
+
+        if (_blocking.InCounterHit())
+        {
+            _hitstop += HitstopFromCounter(_currentMove.level);
+        }
         
         StartCoroutine(WaitForFrames(move.recoveryFrames + _hitstop, ResetState));
     }
@@ -175,9 +185,25 @@ public class PlayerState : MonoBehaviour
         _blockingBoxes.SetActive(true);
 
         _playerMovement.SetMovement(true);
-        _playerMovement.enabled = true;
+        if (!_blocking.InCounterHit())
+        {
+            _playerMovement.enabled = true;
+            _blocking.SetBlock(true);
+        }
+        
         //_normals.enabled = true;
-        _blocking.SetBlock(true);
+    }
+    
+    private int HitstopFromCounter(int level)
+    {
+        return level switch
+        {
+            0 => 0,
+            1 => 0,
+            2 => 21,
+            3 => 31,
+            _ => 0
+        };
     }
     
     // Perform an action after a certain amount of frames.

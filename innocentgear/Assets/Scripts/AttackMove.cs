@@ -18,6 +18,7 @@ public class AttackMove : ScriptableObject
 
     public int damage;
     public int level;
+    [Range(0, 3)] public int counterHit;
 
     public List<AttackMove> gatlings;
 }
