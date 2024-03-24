@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9e6f1bc1c11b1140b13be15825adc97, type: 3}
+  m_Name: j.6D
+  m_EditorClassIdentifier: 
+  boxes: {fileID: 8043178424943231962, guid: 88a0cb7f32dd5f04680bcd9f6e1c9d17, type: 3}
+  startupFrames: 2
+  activeFrames: 3
+  recoveryFrames: 38
+  onHit: 50
+  onBlock: 0
+  isLow: 0
+  isHigh: 0
+  isThrow: 0
+  isAirThrow: 1
+  damage: 80
+  level: 0
+  counterHit: 0
+  gatlings: []

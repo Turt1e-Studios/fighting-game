@@ -15,6 +15,8 @@ public class AttackMove : ScriptableObject
 
     public bool isLow;
     public bool isHigh;
+    public bool isThrow;
+    public bool isAirThrow;
 
     public int damage;
     public int level;

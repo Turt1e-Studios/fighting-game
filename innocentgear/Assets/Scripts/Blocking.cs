@@ -54,7 +54,7 @@ public class Blocking : MonoBehaviour
         if (!_canBlock) {
             return; // Needs to be able to block
         }
-        print(gameObject + " " + _canBlock);
+        //print(gameObject + " " + _canBlock);
         
         if (_playerInput.CurrentDirection is 1 or 2) // Low blocked
         {
@@ -91,17 +91,26 @@ public class Blocking : MonoBehaviour
     // Player recieves and checks and attack
     public void RecieveBlock(AttackMove move, bool opponentGrounded)
     {
-        if (move.isHigh && !_highBlock || move.isLow && !_lowBlock)
+        if ((move.isThrow && !_playerMovement.IsGrounded()) || (move.isAirThrow && _playerMovement.IsGrounded()))
         {
+            // Does nothing if throw misses
+            print("missed throw");
+            return;
+        }
+        else if ((move.isHigh && !_highBlock) || (move.isLow && !_lowBlock))
+        {
+            print("didn't block correctly");
             GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitStop(move.level), move.damage, opponentGrounded, move.counterHit);
         }
-        else if (_isBlocking)
+        else if (_isBlocking && !move.isThrow && !move.isAirThrow)
         {
+            print("blocked");
             GetBlocked(move.activeFrames + move.recoveryFrames + move.onBlock);
         }
         else
         {
-            GetHit(move.activeFrames + move.recoveryFrames + move.onHit, move.damage + HitStop(move.level), opponentGrounded, move.counterHit);
+            print("didn't block");
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitStop(move.level), move.damage + HitStop(move.level), opponentGrounded, move.counterHit);
         }
     }
 
@@ -225,7 +234,7 @@ public class Blocking : MonoBehaviour
 
     private void DisableControls()
     {
-        print("disabled controls");
+        //print("disabled controls");
         SetBlock(false);
         GetComponent<PlayerMovement>().enabled = false;
         GetComponent<Normals>().enabled = false;

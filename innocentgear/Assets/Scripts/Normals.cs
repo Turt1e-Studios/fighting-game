@@ -31,6 +31,8 @@ public class Normals : MonoBehaviour
     [SerializeField] private AttackMove sixP;
     [SerializeField] private AttackMove sixS;
     [SerializeField] private AttackMove sixH;
+    [SerializeField] private AttackMove sixD;
+    [SerializeField] private AttackMove jumpSixD;
 
     private PlayerInput _playerInput;
     private PlayerState _playerState;
@@ -114,13 +116,17 @@ public class Normals : MonoBehaviour
             }
             else if (Input.GetKeyDown(dustKey))
             {
-                if (_playerInput.CurrentDirection is 6 or 5 or 4)
+                if (_playerInput.CurrentDirection is 5 or 4)
                 {
                     _playerState.Move(fiveD);
                 }
                 else if (_playerInput.CurrentDirection is 1 or 2 or 3)
                 {
                     _playerState.Move(twoD);
+                }
+                else if (_playerInput.CurrentDirection is 6)
+                {
+                    _playerState.Move(sixD);
                 }
             }
         }
@@ -144,7 +150,14 @@ public class Normals : MonoBehaviour
             }
             else if (Input.GetKeyDown(dustKey))
             {
-                _playerState.Move(jumpD);
+                if (_playerInput.CurrentDirection is 6)
+                {
+                    _playerState.Move(jumpSixD);
+                }
+                else
+                {
+                    _playerState.Move(jumpD);
+                }
             }
         }
     }
