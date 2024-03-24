@@ -62,11 +62,6 @@ public class GameOverScreen : MonoBehaviour
         StartCoroutine(WaitForTime(3f));
     }
 
-    private void Test(bool p1Winner)
-    {
-        
-    }
-    
     // Perform an action after a certain amount of frames.
     private IEnumerator WaitForTime(float seconds)
     {
@@ -82,5 +77,10 @@ public class GameOverScreen : MonoBehaviour
         player1.GetComponent<Health>().ResetHealth();
         player2.GetComponent<Health>().ResetHealth();
         roundStart.StartRound();
+    }
+
+    public void ResetGame()
+    {
+        SceneManager.LoadScene("Game");
     }
 }
