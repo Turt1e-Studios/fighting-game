@@ -105,7 +105,7 @@ public class Blocking : MonoBehaviour
         else if (_isBlocking && !move.isThrow && !move.isAirThrow)
         {
             print("blocked");
-            GetBlocked(move.activeFrames + move.recoveryFrames + move.onBlock);
+            GetBlocked(move.activeFrames + move.recoveryFrames + move.onBlock, move);
         }
         else
         {
@@ -224,9 +224,21 @@ public class Blocking : MonoBehaviour
         };
     }
 
-    private void GetBlocked(int blockstun)
+    private void GetBlocked(int blockstun, AttackMove move)
     {
         DisableControls();
+
+        if (move.isSpecial)
+        {
+            if (move.isProjectile)
+            {
+                _health.Damage((int) (0.12 * move.damage));
+            }
+            else
+            {
+                _health.Damage((int) (0.25 * move.damage));
+            }
+        }
         
         _spriteRenderer.color = Color.yellow;
         StartCoroutine(WaitForFrames(blockstun, ReEnable));

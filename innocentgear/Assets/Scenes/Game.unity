@@ -2680,8 +2680,8 @@ MonoBehaviour:
   downMovementKey: 274
   leftMovementKey: 276
   rightMovementKey: 275
-  delayBetweenPresses: 0.4
-  delayBeforeCombo: 0.6
+  delayBetweenPresses: 1
+  delayBeforeCombo: 1
 --- !u!114 &833175652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4387,8 +4387,8 @@ MonoBehaviour:
   downMovementKey: 115
   leftMovementKey: 97
   rightMovementKey: 100
-  delayBetweenPresses: 0.4
-  delayBeforeCombo: 0.6
+  delayBetweenPresses: 1
+  delayBeforeCombo: 1
 --- !u!114 &1220494835
 MonoBehaviour:
   m_ObjectHideFlags: 0
