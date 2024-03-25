@@ -37,6 +37,7 @@ public class Normals : MonoBehaviour
     [Header("Specials")]
     [SerializeField] private AttackMove twoThreeSixP;
     [SerializeField] private AttackMove twoOneFourP;
+    [SerializeField] private AttackMove fourOneTwoThreeSixH;
 
     private PlayerInput _playerInput;
     private PlayerState _playerState;
@@ -118,7 +119,12 @@ public class Normals : MonoBehaviour
             }
             else if (Input.GetKeyDown(heavyKey))
             {
-                if (_playerInput.CurrentDirection is 5 or 4)
+                if (_playerInput.CheckCombo(new List<int> { 4, 1, 2, 3, 6 }))
+                {
+                    print("doing 41236");
+                    _playerState.Move(fourOneTwoThreeSixH);
+                }
+                else if (_playerInput.CurrentDirection is 5 or 4)
                 {
                     _playerState.Move(fiveH);
                 }
