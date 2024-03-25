@@ -18,6 +18,8 @@ public class AttackMove : ScriptableObject
     public bool isThrow;
     public bool isAirThrow;
     public bool isProjectile;
+    public bool isSpecial;
+    public bool hasNoHitbox;
 
     public int damage;
     public int level;

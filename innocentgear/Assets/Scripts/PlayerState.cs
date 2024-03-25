@@ -26,6 +26,7 @@ public class PlayerState : MonoBehaviour
     private bool _alreadyActivated;
     private bool _hasGatling;
     private AttackMove _gatlingMove;
+    private PlayerInput _playerInput;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +36,7 @@ public class PlayerState : MonoBehaviour
         _playerMovement = GetComponent<PlayerMovement>();
         _normals = GetComponent<Normals>();
         _blocking = GetComponent<Blocking>();
+        _playerInput = GetComponent<PlayerInput>();
         
         _enemyLayer = isPlayerOne ? "Hurtbox2" : "Hurtbox";
     }
@@ -48,7 +50,7 @@ public class PlayerState : MonoBehaviour
     {
         //print(_hitboxActive + " " + _alreadyHit);
         // Activates when hitbox hits an enemy hurtbox.
-        if (_hitboxActive && !_alreadyHit)
+        if (_hitboxActive && !_alreadyHit && !_currentMove.hasNoHitbox)
         {
             foreach (Collider2D hitbox in _hitboxes)
             {
@@ -77,7 +79,8 @@ public class PlayerState : MonoBehaviour
             }
             return;
         }
-
+        
+        _playerInput.ResetCombo();
         if (move.boxes.name != "c.S") _normals.CompletedMove();
         _alreadyActivated = true;
         
@@ -97,7 +100,11 @@ public class PlayerState : MonoBehaviour
     // Frames before attack is activated
     void Startup(AttackMove move)
     {
-        if (move.isLow)
+        if (move.isSpecial)
+        {
+            _spriteRenderer.color = new Color(0, 0.5f, 0.5f);
+        }
+        else if (move.isLow)
         {
             _spriteRenderer.color = new Color(0, 0.5f, 0);
         }
@@ -142,7 +149,10 @@ public class PlayerState : MonoBehaviour
         
         // Set hitbox to be active so that it can be checked in the Update method
         _hitboxActive = true;
-        _hitboxes = _boxes.transform.Find("Hitbox").GetComponentsInChildren<Collider2D>();
+        if (!move.hasNoHitbox)
+        {
+            _hitboxes = _boxes.transform.Find("Hitbox").GetComponentsInChildren<Collider2D>();
+        }
         if (move.isProjectile)
         {
             bool facingRight = _playerMovement.GetDisplacement() > 0;
@@ -156,7 +166,10 @@ public class PlayerState : MonoBehaviour
     void Recovery(AttackMove move)
     {
         // Remove hitbox again and get normal hurtbox
-        Destroy(_boxes.transform.Find("Hitbox").gameObject);
+        if (!move.hasNoHitbox)
+        {
+            Destroy(_boxes.transform.Find("Hitbox").gameObject);
+        }
         _hitboxActive = false;
 
         // Skip recovery and go to gatling if it used

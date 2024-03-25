@@ -36,6 +36,7 @@ public class Normals : MonoBehaviour
     [SerializeField] private AttackMove jumpSixD;
     [Header("Specials")]
     [SerializeField] private AttackMove twoThreeSixP;
+    [SerializeField] private AttackMove twoOneFourP;
 
     private PlayerInput _playerInput;
     private PlayerState _playerState;
@@ -59,7 +60,13 @@ public class Normals : MonoBehaviour
             {
                 if (_playerInput.CheckCombo(new List<int> {2, 3, 6}))
                 {
+                    print("doing 2 3 6");
                     _playerState.Move(twoThreeSixP);
+                }
+                else if (_playerInput.CheckCombo(new List<int> {2, 1, 4}))
+                {
+                    print("doing 2 1 4");
+                    _playerState.Move(twoOneFourP);
                 }
                 else if (_playerInput.CurrentDirection is 5 or 4)
                 {

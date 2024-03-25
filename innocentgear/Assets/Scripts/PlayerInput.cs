@@ -113,12 +113,17 @@ public class PlayerInput : MonoBehaviour
         return _directionList.GetRange(0, nums);
     }
 
+    public void ResetCombo()
+    {
+        _directionList.Clear();
+    }
+
     public bool CheckCombo(List<int> combo)
     {
-        print($"combo list: ({string.Join(", ", combo)}).");
+        //print($"combo list: ({string.Join(", ", combo)}).");
 
         List<int> compareList = new List<int>(_directionList);
-        print($"original list: ({string.Join(", ", compareList)}).");
+        //print($"original list: ({string.Join(", ", compareList)}).");
         if (compareList.First() == 5)
         {
             compareList.RemoveAt(0);
@@ -127,9 +132,9 @@ public class PlayerInput : MonoBehaviour
         {
             compareList.RemoveAt(compareList.Count - 1);
         }
-        print($"changed list: ({string.Join(", ", compareList)}).");
+        //print($"changed list: ({string.Join(", ", compareList)}).");
 
-        print("equals? " + compareList.Equals(combo));
+        //print("equals? " + compareList.Equals(combo));
         return compareList.Count >= 1 && compareList.SequenceEqual(combo);
     }
 }
