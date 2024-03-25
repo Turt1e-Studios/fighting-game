@@ -143,6 +143,11 @@ public class PlayerState : MonoBehaviour
         // Set hitbox to be active so that it can be checked in the Update method
         _hitboxActive = true;
         _hitboxes = _boxes.transform.Find("Hitbox").GetComponentsInChildren<Collider2D>();
+        if (move.isProjectile)
+        {
+            bool facingRight = _playerMovement.GetDisplacement() > 0;
+            _hitboxes[0].gameObject.GetComponent<Projectile>().SetDirection(facingRight);
+        }
 
         StartCoroutine(WaitForFrames(move.activeFrames, () => Recovery(move)));
     }

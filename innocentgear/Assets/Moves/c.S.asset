@@ -20,6 +20,8 @@ MonoBehaviour:
   onBlock: 3
   isLow: 0
   isHigh: 0
+  isThrow: 0
+  isAirThrow: 0
   damage: 44
   level: 4
   counterHit: 2

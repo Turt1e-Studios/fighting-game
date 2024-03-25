@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // Controls the activation of the player's regular attacks.
@@ -33,6 +34,8 @@ public class Normals : MonoBehaviour
     [SerializeField] private AttackMove sixH;
     [SerializeField] private AttackMove sixD;
     [SerializeField] private AttackMove jumpSixD;
+    [Header("Specials")]
+    [SerializeField] private AttackMove twoThreeSixP;
 
     private PlayerInput _playerInput;
     private PlayerState _playerState;
@@ -54,7 +57,11 @@ public class Normals : MonoBehaviour
         {
             if (Input.GetKeyDown(punchKey))
             {
-                if (_playerInput.CurrentDirection is 5 or 4)
+                if (_playerInput.CheckCombo(new List<int> {2, 3, 6}))
+                {
+                    _playerState.Move(twoThreeSixP);
+                }
+                else if (_playerInput.CurrentDirection is 5 or 4)
                 {
                     _playerState.Move(fiveP);
                 }
@@ -167,7 +174,6 @@ public class Normals : MonoBehaviour
 
     public void CompletedMove()
     {
-        print("resetting close S");
         _didCloseS = false;
     }
 }
