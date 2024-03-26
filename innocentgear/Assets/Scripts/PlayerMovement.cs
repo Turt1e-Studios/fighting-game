@@ -112,6 +112,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public bool IsFlipped()
+    {
+        return _enemyDisplacement < 0;
+    }
+
     // Flip controls if players switch sides
     private void CheckFlipControls()
     {

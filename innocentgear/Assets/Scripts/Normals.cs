@@ -42,6 +42,7 @@ public class Normals : MonoBehaviour
     private PlayerInput _playerInput;
     private PlayerState _playerState;
     private PlayerMovement _playerMovement;
+    private SpecialInput _specialInput;
     private bool _didCloseS;
     
     // Start is called before the first frame update
@@ -50,6 +51,7 @@ public class Normals : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerState = GetComponent<PlayerState>();
         _playerMovement = GetComponent<PlayerMovement>();
+        _specialInput = GetComponent<SpecialInput>();
     }
 
     // Update is called once per frame
@@ -59,97 +61,90 @@ public class Normals : MonoBehaviour
         {
             if (Input.GetKeyDown(punchKey))
             {
-                if (_playerInput.CheckCombo(new List<int> {2, 3, 6}))
+                print("got punch key");
+                if (_specialInput.CheckCombo(new List<int> {2, 3, 4}))
                 {
                     print("doing 2 3 6");
                     _playerState.Move(twoThreeSixP);
                 }
-                else if (_playerInput.CheckCombo(new List<int> {2, 1, 4}))
+                else if (_specialInput.CheckCombo(new List<int> {2, 1, 4}))
                 {
                     print("doing 2 1 4");
                     _playerState.Move(twoOneFourP);
                 }
-                else if (_playerInput.CurrentDirection is 5 or 4)
+                else switch (_playerInput.CurrentDirection)
                 {
-                    _playerState.Move(fiveP);
-                }
-                else if (_playerInput.CurrentDirection is 1 or 2 or 3)
-                {
-                    _playerState.Move(twoP);
-                }
-                else if (_playerInput.CurrentDirection is 6)
-                {
-                    _playerState.Move(sixP);
+                    case 5 or 4:
+                        _playerState.Move(fiveP);
+                        break;
+                    case 1 or 2 or 3:
+                        _playerState.Move(twoP);
+                        break;
+                    case 6:
+                        _playerState.Move(sixP);
+                        break;
                 }
             }
             else if (Input.GetKeyDown(kickKey))
             {
-                if (_playerInput.CurrentDirection is 6 or 5 or 4)
+                switch (_playerInput.CurrentDirection)
                 {
-                    _playerState.Move(fiveK);
-                }
-                else if (_playerInput.CurrentDirection is 1 or 2 or 3)
-                {
-                    _playerState.Move(twoK);
+                    case 6 or 5 or 4:
+                        _playerState.Move(fiveK);
+                        break;
+                    case 1 or 2 or 3:
+                        _playerState.Move(twoK);
+                        break;
                 }
             }
             else if (Input.GetKeyDown(slashKey))
             {
-                if (_playerInput.CurrentDirection is 5 or 4)
+                switch (_playerInput.CurrentDirection)
                 {
-                    if (Mathf.Abs(_playerMovement.GetDisplacement()) < 3f && !_didCloseS)
-                    {
+                    case 5 or 4 when Mathf.Abs(_playerMovement.GetDisplacement()) < 3f && !_didCloseS:
                         _playerState.Move(cS);
                         _didCloseS = true;
-                    }
-                    else
-                    {
+                        break;
+                    case 5 or 4:
                         _playerState.Move(fS);
                         _didCloseS = false;
-                    }
-                }
-                else if (_playerInput.CurrentDirection is 1 or 2 or 3)
-                {
-                    _playerState.Move(twoS);
-                }
-                else if (_playerInput.CurrentDirection is 6)
-                {
-                    _playerState.Move(sixS);
+                        break;
+                    case 1 or 2 or 3:
+                        _playerState.Move(twoS);
+                        break;
+                    case 6:
+                        _playerState.Move(sixS);
+                        break;
                 }
             }
             else if (Input.GetKeyDown(heavyKey))
             {
-                if (_playerInput.CheckCombo(new List<int> { 4, 1, 2, 3, 6 }))
+                switch (_playerInput.CurrentDirection)
                 {
-                    print("doing 41236");
-                    _playerState.Move(fourOneTwoThreeSixH);
-                }
-                else if (_playerInput.CurrentDirection is 5 or 4)
-                {
-                    _playerState.Move(fiveH);
-                }
-                else if (_playerInput.CurrentDirection is 1 or 2 or 3)
-                {
-                    _playerState.Move(twoH);
-                }
-                else if (_playerInput.CurrentDirection is 6)
-                {
-                    _playerState.Move(sixH);
+                    case 5 or 4:
+                        _playerState.Move(fiveH);
+                        break;
+                    case 1 or 2 or 3:
+                        _playerState.Move(twoH);
+                        break;
+                    case 6:
+                        _playerState.Move(sixH);
+                        break;
                 }
             }
             else if (Input.GetKeyDown(dustKey))
             {
-                if (_playerInput.CurrentDirection is 5 or 4)
+                switch (_playerInput.CurrentDirection)
                 {
-                    _playerState.Move(fiveD);
-                }
-                else if (_playerInput.CurrentDirection is 1 or 2 or 3)
-                {
-                    _playerState.Move(twoD);
-                }
-                else if (_playerInput.CurrentDirection is 6)
-                {
-                    _playerState.Move(sixD);
+                    case 5 or 4:
+                        _playerState.Move(fiveD);
+                        break;
+                    case 1 or 2 or 3:
+                        _playerState.Move(twoD);
+                        break;
+                    case 6:
+                        _playerState.Move(sixD);
+                        break;
                 }
             }
         }

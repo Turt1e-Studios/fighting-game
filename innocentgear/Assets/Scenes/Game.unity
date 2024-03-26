@@ -2624,6 +2624,7 @@ GameObject:
   - component: {fileID: 833175650}
   - component: {fileID: 833175649}
   - component: {fileID: 833175657}
+  - component: {fileID: 833175658}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Player
@@ -2885,6 +2886,20 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   fill: {fileID: 1033197518}
+--- !u!114 &833175658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 833175648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0d20d7d17a5e74082da9d54969c6e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keys: 11010000140100001201000013010000750000006a000000690000006b0000006f000000
+  delayBetweenPresses: 0.3
 --- !u!1 &857151627
 GameObject:
   m_ObjectHideFlags: 0
@@ -4207,6 +4222,7 @@ GameObject:
   - component: {fileID: 1220494835}
   - component: {fileID: 1220494836}
   - component: {fileID: 1220494837}
+  - component: {fileID: 1220494838}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4468,6 +4484,20 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   fill: {fileID: 1512303207}
+--- !u!114 &1220494838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220494826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0d20d7d17a5e74082da9d54969c6e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keys: 770000006100000073000000640000006300000066000000760000006700000062000000
+  delayBetweenPresses: 0.3
 --- !u!1 &1243753706
 GameObject:
   m_ObjectHideFlags: 0

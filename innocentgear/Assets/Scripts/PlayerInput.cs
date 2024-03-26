@@ -38,47 +38,54 @@ public class PlayerInput : MonoBehaviour
         {
             if (Input.GetKey(downMovementKey))
             {
-                SetCurrentDirection(5);
+                CurrentDirection = 5;
             }
             else if (Input.GetKey(leftMovementKey) && !Input.GetKey(rightMovementKey))
             {
-                SetCurrentDirection(7);
+                CurrentDirection = 7;
             }
             else if (Input.GetKey(rightMovementKey) && !Input.GetKey(leftMovementKey))
             {
-                SetCurrentDirection(9);
+                CurrentDirection = 9;
             }
             else
             {
-                SetCurrentDirection(8);
+                CurrentDirection = 8;
             }
         }
         else if (Input.GetKey(leftMovementKey))
         {
             if (Input.GetKey(rightMovementKey))
             {
-                SetCurrentDirection(5);
+                CurrentDirection = 5;
             }
             else if (Input.GetKey(downMovementKey))
             {
-                SetCurrentDirection(1);
+                CurrentDirection = 1;
             }
             else
             {
-                SetCurrentDirection(4);
+                CurrentDirection = 4;
             }
         }
         else if (Input.GetKey(rightMovementKey))
         {
-            SetCurrentDirection(Input.GetKey(downMovementKey) ? 3 : 6);
+            if (Input.GetKey(downMovementKey))
+            {
+                CurrentDirection = 3;
+            }
+            else
+            {
+                CurrentDirection = 6;
+            }
         }
         else if (Input.GetKey(downMovementKey))
         {
-            SetCurrentDirection(2);
+            CurrentDirection = 2;
         }
         else
         {
-            SetCurrentDirection(5);
+            CurrentDirection = 5;
         }
     }
 

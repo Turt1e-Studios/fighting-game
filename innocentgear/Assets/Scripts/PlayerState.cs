@@ -26,7 +26,7 @@ public class PlayerState : MonoBehaviour
     private bool _alreadyActivated;
     private bool _hasGatling;
     private AttackMove _gatlingMove;
-    private PlayerInput _playerInput;
+    private SpecialInput _playerInput;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +36,7 @@ public class PlayerState : MonoBehaviour
         _playerMovement = GetComponent<PlayerMovement>();
         _normals = GetComponent<Normals>();
         _blocking = GetComponent<Blocking>();
-        _playerInput = GetComponent<PlayerInput>();
+        _playerInput = GetComponent<SpecialInput>();
         
         _enemyLayer = isPlayerOne ? "Hurtbox2" : "Hurtbox";
     }
