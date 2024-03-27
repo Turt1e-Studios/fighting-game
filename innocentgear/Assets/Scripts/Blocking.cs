@@ -23,7 +23,7 @@ public class Blocking : MonoBehaviour
     private Health _health;
     private PlayerState _playerState;
     private bool _inCounterHit;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -91,7 +91,7 @@ public class Blocking : MonoBehaviour
     // Player recieves and checks and attack
     public void RecieveBlock(AttackMove move, bool opponentGrounded)
     {
-        if ((move.isThrow && !_playerMovement.IsGrounded()) || (move.isAirThrow && _playerMovement.IsGrounded()))
+        if ((move.isThrow && (!_playerMovement.IsGrounded() || _lowBlock)) || (move.isAirThrow && _playerMovement.IsGrounded()))
         {
             // Does nothing if throw misses
             print("missed throw");
