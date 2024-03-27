@@ -29,3 +29,4 @@ MonoBehaviour:
   level: 4
   counterHit: 2
   gatlings: []
+  changesPosition: 1
