@@ -125,7 +125,12 @@ public class Normals : MonoBehaviour
             }
             else if (Input.GetKeyDown(heavyKey))
             {
-                switch (_playerInput.CurrentDirection)
+                if (_specialInput.CheckCombo(new List<int> {1, 2, 3, 7}))
+                {
+                    //print("doing 623K");
+                    _playerState.Move(fourOneTwoThreeSixH);
+                }
+                else switch (_playerInput.CurrentDirection)
                 {
                     case 5 or 4:
                         _playerState.Move(fiveH);

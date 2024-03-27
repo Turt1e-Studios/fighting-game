@@ -178,7 +178,7 @@ public class PlayerState : MonoBehaviour
             //print("doing a gatling");
             _hasGatling = false;
             _alreadyActivated = false;
-            ResetState();
+            ResetState(move);
             //_alreadyHit = true;
             Move(_gatlingMove);
             return;
@@ -192,17 +192,26 @@ public class PlayerState : MonoBehaviour
         }
         
         // removed extra hitstop because it was too slow but can add it in back later
-        StartCoroutine(WaitForFrames(move.recoveryFrames, ResetState));
+        StartCoroutine(WaitForFrames(move.recoveryFrames, () => ResetState(move)));
     }
 
     // Reset the state of the player to normal after attack is over.
-    void ResetState()
+    void ResetState(AttackMove move)
     {
         _spriteRenderer.color = Color.white;
 
         _alreadyActivated = false;
+        Vector2 newPosition = new Vector2();
+        if (_boxes.transform.Find("Center") != null)
+        {
+            newPosition = _boxes.transform.Find("Center").transform.position;
+        }
         Destroy(_boxes);
         _blockingBoxes.SetActive(true);
+        if (move.changesPosition)
+        {
+            _blockingBoxes.transform.parent.transform.position = newPosition;
+        }
 
         _playerMovement.SetMovement(true);
         if (!_blocking.InCounterHit())

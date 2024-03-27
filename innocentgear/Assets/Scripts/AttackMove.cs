@@ -26,4 +26,5 @@ public class AttackMove : ScriptableObject
     [Range(0, 3)] public int counterHit;
 
     public List<AttackMove> gatlings;
+    public bool changesPosition;
 }
