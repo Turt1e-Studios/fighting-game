@@ -33,7 +33,7 @@ public class SpecialInput : MonoBehaviour
             {
                 _keylist.Add(key);
                 _lastPresssedTime = Time.time;
-                print($"combo list: ({string.Join(", ", _keylist)}).");
+                //print($"combo list: ({string.Join(", ", _keylist)}).");
             }
         }
     }
