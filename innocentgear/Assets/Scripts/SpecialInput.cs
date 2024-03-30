@@ -41,9 +41,9 @@ public class SpecialInput : MonoBehaviour
     // Up: 0. Left: 1. Down: 2. Right: 3. Punch: 4. Kick: 5. Slash: 6. Heavy. 7: Dust.
     public bool CheckCombo(List<int> combo)
     {
-        print("checking combo");
+        //print("checking combo");
         List<KeyCode> convertedKeys = new List<KeyCode>();
-        print($"combo list: ({string.Join(", ", _keylist)}).");
+        //print($"combo list: ({string.Join(", ", _keylist)}).");
         foreach (int num in combo)
         {
             if ((num == 1 || num == 3) && _playerMovement.IsFlipped())

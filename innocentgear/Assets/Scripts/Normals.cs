@@ -62,15 +62,12 @@ public class Normals : MonoBehaviour
         {
             if (Input.GetKeyDown(punchKey))
             {
-                print("got punch key");
                 if (_specialInput.CheckCombo(new List<int> {2, 3, 4}))
                 {
-                    print("doing 2 3 6");
                     _playerState.Move(twoThreeSixP);
                 }
                 else if (_specialInput.CheckCombo(new List<int> {2, 1, 4}))
                 {
-                    print("doing 2 1 4");
                     _playerState.Move(twoOneFourP);
                 }
                 else switch (_playerInput.CurrentDirection)
@@ -90,7 +87,6 @@ public class Normals : MonoBehaviour
             {
                 if (_specialInput.CheckCombo(new List<int> {3, 2, 3, 5}))
                 {
-                    print("doing 623K");
                     _playerState.Move(sixTwoThreeK);
                 }
                 else switch (_playerInput.CurrentDirection)

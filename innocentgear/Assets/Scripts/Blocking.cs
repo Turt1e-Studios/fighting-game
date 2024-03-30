@@ -100,7 +100,7 @@ public class Blocking : MonoBehaviour
         else if ((move.isHigh && !_highBlock) || (move.isLow && !_lowBlock))
         {
             print("didn't block correctly");
-            GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitStop(move.level), move.damage, opponentGrounded, move.counterHit, move.level);
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitStop(move.level), move.damage, opponentGrounded, move.counterHit, move.level, move);
         }
         else if (_isBlocking && !move.isThrow && !move.isAirThrow)
         {
@@ -110,7 +110,7 @@ public class Blocking : MonoBehaviour
         else
         {
             print("didn't block");
-            GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitStop(move.level), move.damage, opponentGrounded, move.counterHit, move.level);
+            GetHit(move.activeFrames + move.recoveryFrames + move.onHit + HitStop(move.level), move.damage, opponentGrounded, move.counterHit, move.level, move);
         }
     }
 
@@ -153,7 +153,7 @@ public class Blocking : MonoBehaviour
         return _inCounterHit;
     }
 
-    private void GetHit(int hitstun, int damage, bool opponentGrounded, int counterHit, int level)
+    private void GetHit(int hitstun, int damage, bool opponentGrounded, int counterHit, int level, AttackMove move)
     {
         float multiplier = 1f;
         int extraFrames = 0;
@@ -173,8 +173,12 @@ public class Blocking : MonoBehaviour
         _spriteRenderer.color = Color.gray;
 
         float groundFactor = opponentGrounded ? 1 : 0; // only vertical knockback if grounded
-        GetComponent<Rigidbody2D>().AddForce(knockbackMultiplier * Mathf.Sqrt((float) damage / (level + 1)) * new Vector2(-1 * _playerMovement.GetDisplacement() / Math.Abs(_playerMovement.GetDisplacement()) * horizontalKnockback, groundFactor * verticalKnockback));
-        StartCoroutine(WaitForFrames(hitstun + extraFrames, ReEnable));
+        if (!move.isThrow && !move.isAirThrow)
+        {
+            GetComponent<Rigidbody2D>().AddForce(knockbackMultiplier * Mathf.Sqrt((float) damage / (level + 1)) * new Vector2(-1 * _playerMovement.GetDisplacement() / Math.Abs(_playerMovement.GetDisplacement()) * horizontalKnockback, groundFactor * verticalKnockback));
+        }
+        
+        StartCoroutine(WaitForFrames(hitstun + extraFrames, () => ReEnable(move.switchesSides)));
     }
 
     private void SlowDown(int frames)
@@ -241,7 +245,7 @@ public class Blocking : MonoBehaviour
         }
         
         _spriteRenderer.color = Color.yellow;
-        StartCoroutine(WaitForFrames(blockstun, ReEnable));
+        StartCoroutine(WaitForFrames(blockstun, () => ReEnable(false)));
     }
 
     private void DisableControls()
@@ -253,13 +257,18 @@ public class Blocking : MonoBehaviour
         //GetComponent<PlayerState>().enabled = false;
     }
 
-    private void ReEnable()
+    private void ReEnable(bool switchesSides)
     {
         SetBlock(true);
         GetComponent<PlayerMovement>().enabled = true;
         GetComponent<Normals>().enabled = true;
         _inCounterHit = false;
         //GetComponent<PlayerState>().enabled = true;
+        if (switchesSides)
+        {
+            // Might cause bugs with barriers
+            transform.position = _playerMovement.GetEnemy().transform.position + new Vector3(_playerMovement.GetDisplacement() > 0 ? 1f : -1f, 0, 0);
+        }
     }
 
     // Prevents regular hitboxes from interfering when a player attacks
