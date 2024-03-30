@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9e6f1bc1c11b1140b13be15825adc97, type: 3}
-  m_Name: 214K
+  m_Name: 236K
   m_EditorClassIdentifier: 
-  boxes: {fileID: 8660614373850141900, guid: 5cd81017e7815194d804b70643250812, type: 3}
-  startupFrames: 30
-  activeFrames: 7
-  recoveryFrames: 13
-  onHit: 44
-  onBlock: -3
-  damage: 50
-  level: 3
-  counterHit: 2
+  boxes: {fileID: 5319569675347251645, guid: 2600fc402d0c3dc4ab3d9f26e2b50d42, type: 3}
+  startupFrames: 12
+  activeFrames: 6
+  recoveryFrames: 15
+  onHit: -4
+  onBlock: -7
+  damage: 20
+  level: 2
+  counterHit: 0
   isLow: 0
-  isHigh: 1
+  isHigh: 0
   isThrow: 0
   isAirThrow: 0
   isSpecial: 1
@@ -30,5 +30,5 @@ MonoBehaviour:
   changesPosition: 1
   isProjectile: 0
   switchesSides: 0
-  initialForce: {x: -20, y: 70}
+  initialForce: {x: 0, y: 0}
   gatlings: []
