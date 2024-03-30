@@ -197,7 +197,6 @@ public class PlayerMovement : MonoBehaviour
     // Reset velocity quickly after dashing
     void GroundDash()
     {
-        print("ground dashed");
         _rigidbody2D.velocity = new Vector2(-1f * _oppositeDirectionMultiplier, 0f) * groundDashSpeed;
         StartCoroutine(ResetVelocity(groundDashDuration));
     }
@@ -212,7 +211,6 @@ public class PlayerMovement : MonoBehaviour
     // Super jump command
     void SuperJump()
     {
-        print("super jumped");
         if (_usedAirMove) return;
 
         Vector2 direction = Vector2.up.normalized;
@@ -235,7 +233,6 @@ public class PlayerMovement : MonoBehaviour
     // Air dash backwards command
     void AirDashBackwards()
     {
-        print("air dashed backwards");
         if (_airDashed) return;
         _rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         _rigidbody2D.AddForce(Vector2.left * (backwardsAirDashSpeed * _oppositeDirectionMultiplier), ForceMode2D.Impulse);
@@ -246,7 +243,6 @@ public class PlayerMovement : MonoBehaviour
     // Air dash forwards command
     void AirDashForwards()
     {
-        print("air dashed forwards");
         if (_airDashed) return;
         _rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         _rigidbody2D.AddForce(Vector2.right * (forwardsAirDashSpeed * _oppositeDirectionMultiplier), ForceMode2D.Impulse);

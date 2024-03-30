@@ -11,7 +11,7 @@ public class Force : MonoBehaviour
     {
         PlayerMovement playerMovement = transform.parent.GetComponent<PlayerMovement>();
         int direction = playerMovement.GetDisplacement() > 0 ? 1 : -1;
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(force.x * direction, force.y), ForceMode2D.Impulse);
+        transform.parent.GetComponent<Rigidbody2D>().AddForce(new Vector2(force.x * direction, force.y), ForceMode2D.Impulse);
     }
 
     // Update is called once per frame

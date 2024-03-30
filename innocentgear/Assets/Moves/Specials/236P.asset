@@ -18,13 +18,20 @@ MonoBehaviour:
   recoveryFrames: 4
   onHit: 37
   onBlock: -10
+  damage: 35
+  level: 2
+  counterHit: 0
   isLow: 0
   isHigh: 0
   isThrow: 0
   isAirThrow: 0
-  isProjectile: 1
   isSpecial: 1
-  damage: 35
-  level: 2
-  counterHit: 0
+  hasNoHitbox: 0
+  changesPosition: 0
+  isProjectile: 1
+  switchesSides: 0
+  initialForce: {x: 0, y: 0}
   gatlings: []
+  otherBoxes: []
+  otherBoxFrames: 
+  rekka: {fileID: 0}

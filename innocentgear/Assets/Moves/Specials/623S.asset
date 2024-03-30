@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9e6f1bc1c11b1140b13be15825adc97, type: 3}
-  m_Name: 236K
+  m_Name: 623S
   m_EditorClassIdentifier: 
-  boxes: {fileID: 5319569675347251645, guid: 2600fc402d0c3dc4ab3d9f26e2b50d42, type: 3}
-  startupFrames: 12
-  activeFrames: 6
-  recoveryFrames: 15
-  onHit: -4
-  onBlock: -7
-  damage: 20
+  boxes: {fileID: 8591898009657096129, guid: 98b59c6804ee4f0498c9c221b58294db, type: 3}
+  startupFrames: 9
+  activeFrames: 14
+  recoveryFrames: 28
+  onHit: 17
+  onBlock: -28
+  damage: 40
   level: 2
-  counterHit: 0
+  counterHit: 2
   isLow: 0
   isHigh: 0
   isThrow: 0
@@ -32,6 +32,8 @@ MonoBehaviour:
   switchesSides: 0
   initialForce: {x: 0, y: 0}
   gatlings: []
-  otherBoxes: []
-  otherBoxFrames: 
-  rekka: {fileID: 11400000, guid: 581e12aea54213a44b3422d573ea2ed8, type: 2}
+  otherBoxes:
+  - {fileID: 8591898009657096129, guid: 98b59c6804ee4f0498c9c221b58294db, type: 3}
+  - {fileID: 1575508758731355970, guid: 0725db8893c78574292dbd3cca875ff7, type: 3}
+  otherBoxFrames: 0700000007000000
+  rekka: {fileID: 0}

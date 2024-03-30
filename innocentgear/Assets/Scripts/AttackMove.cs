@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,5 +29,7 @@ public class AttackMove : ScriptableObject
 
     public Vector2 initialForce;
     public List<AttackMove> gatlings;
+    public List<GameObject> otherBoxes; // also includes base attack.
+    public List<int> otherBoxFrames; // necessary if there are other boxes in an attack.
     public AttackMove rekka;
 }

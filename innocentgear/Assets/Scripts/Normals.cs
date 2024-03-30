@@ -42,6 +42,7 @@ public class Normals : MonoBehaviour
     [SerializeField] private AttackMove twoOneFourK;
     [SerializeField] private AttackMove jumpTwoOneFourK;
     [SerializeField] private AttackMove twoThreeSixK;
+    [SerializeField] private AttackMove sixTwoThreeS;
 
     private PlayerInput _playerInput;
     private PlayerState _playerState;
@@ -112,7 +113,11 @@ public class Normals : MonoBehaviour
             }
             else if (Input.GetKeyDown(slashKey))
             {
-                switch (_playerInput.CurrentDirection)
+                if (_specialInput.CheckCombo(new List<int> {3, 2, 3, 6}))
+                {
+                    _playerState.Move(sixTwoThreeS);
+                }
+                else switch (_playerInput.CurrentDirection)
                 {
                     case 5 or 4 when Mathf.Abs(_playerMovement.GetDisplacement()) < 3f && !_didCloseS:
                         _playerState.Move(cS);

@@ -1023,7 +1023,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1204640004322302317}
   - component: {fileID: 6487936552848898292}
-  - component: {fileID: 2944926370804867679}
   m_Layer: 0
   m_Name: 214K
   m_TagString: Untagged
@@ -1064,24 +1063,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   force: {x: 80, y: -80}
---- !u!50 &2944926370804867679
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8660614373850141900}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 2
-  m_LinearDrag: 3
-  m_AngularDrag: 0.05
-  m_GravityScale: 4
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 4

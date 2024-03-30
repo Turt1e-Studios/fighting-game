@@ -70,7 +70,7 @@ public class PlayerState : MonoBehaviour
     // Command to attack is activated
     public void Move(AttackMove move)
     {
-        if (Time.time - _timeSinceLastMove < TimeBetweenRekka && move.rekka != null)
+        if (Time.time - _timeSinceLastMove < TimeBetweenRekka && move.rekka != null) // Rekka after move completed
         {
             move = move.rekka;
         }
@@ -172,7 +172,62 @@ public class PlayerState : MonoBehaviour
             _hitboxes = _boxes.transform.Find("Hitbox").GetComponentsInChildren<Collider2D>();
         }
 
-        StartCoroutine(WaitForFrames(move.activeFrames, () => Recovery(move)));
+        if (move.otherBoxes.Count > 0)
+        {
+            FramedMove(move, 0, 0);
+        }
+        else
+        {
+            StartCoroutine(WaitForFrames(move.activeFrames, () => Recovery(move)));
+        }
+    }
+
+    void FramedMove(AttackMove move, int currentFrameCount, int iteration)
+    {
+        if (iteration == 0) // Already set up by Active() method on first round
+        {
+            print("returning current iteration");
+            StartCoroutine(WaitForFrames(move.otherBoxFrames[iteration], () => FramedMove(move, currentFrameCount + move.otherBoxFrames[iteration], iteration + 1)));
+            return;
+        }
+        
+        Destroy(_boxes.gameObject);
+        var transform1 = transform;
+        print(transform1.position);
+        _boxes = Instantiate(move.otherBoxes[iteration], transform1.position, transform1.rotation);
+        _boxes.transform.SetParent(transform);
+        
+        // Make player two be able to be hit during attack
+        if (!isPlayerOne)
+        {
+            foreach (Transform child in _boxes.transform.Find("Hurtbox").transform)
+            {
+                child.gameObject.layer = LayerMask.NameToLayer("Hurtbox2");
+            }
+        }
+        
+        // Change player appearance
+        if (!isPlayerOne)
+        {
+            _boxes.transform.Find("Hexagon Flat-Top").GetComponent<SpriteRenderer>().color = enemyColor;
+        }
+        _playerMovement.FlipHitboxModel();
+        
+        // Set hitbox to be active so that it can be checked in the Update method
+        _hitboxActive = true;
+        if (!move.hasNoHitbox)
+        {
+            _hitboxes = _boxes.transform.Find("Hitbox").GetComponentsInChildren<Collider2D>();
+        }
+        
+        if (iteration == move.otherBoxes.Count - 1)
+        {
+            StartCoroutine(WaitForFrames(move.activeFrames - currentFrameCount, () => Recovery(move)));
+        }
+        else
+        {
+            StartCoroutine(WaitForFrames(move.otherBoxFrames[iteration], () => FramedMove(move, currentFrameCount + move.otherBoxFrames[iteration], iteration + 1)));
+        }
     }
 
     // Frames where player cannot do anything after an attack

@@ -55,7 +55,7 @@ public class SpecialInput : MonoBehaviour
                 convertedKeys.Add(KeyFromInt(num));
             }
         }
-        print($"combo list: ({string.Join(", ", convertedKeys)}).");
+        //print($"combo list: ({string.Join(", ", convertedKeys)}).");
         return _keylist.SequenceEqual(convertedKeys);
     }
 
