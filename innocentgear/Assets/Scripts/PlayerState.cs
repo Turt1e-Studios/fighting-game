@@ -153,11 +153,6 @@ public class PlayerState : MonoBehaviour
         {
             _hitboxes = _boxes.transform.Find("Hitbox").GetComponentsInChildren<Collider2D>();
         }
-        if (move.isProjectile)
-        {
-            bool facingRight = _playerMovement.GetDisplacement() > 0;
-            _hitboxes[0].gameObject.GetComponent<Projectile>().SetDirection(facingRight);
-        }
 
         StartCoroutine(WaitForFrames(move.activeFrames, () => Recovery(move)));
     }

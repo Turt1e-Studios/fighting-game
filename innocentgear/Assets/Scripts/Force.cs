@@ -9,7 +9,9 @@ public class Force : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
+        PlayerMovement playerMovement = transform.parent.GetComponent<PlayerMovement>();
+        int direction = playerMovement.GetDisplacement() > 0 ? 1 : -1;
+        GetComponent<Rigidbody2D>().AddForce(force * direction, ForceMode2D.Impulse);
     }
 
     // Update is called once per frame
