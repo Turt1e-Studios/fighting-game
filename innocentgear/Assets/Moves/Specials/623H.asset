@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9e6f1bc1c11b1140b13be15825adc97, type: 3}
+  m_Name: 623H
+  m_EditorClassIdentifier: 
+  boxes: {fileID: 8591898009657096129, guid: cd1ceffdf333c04489361d4cc7f0ef8b, type: 3}
+  startupFrames: 13
+  activeFrames: 16
+  recoveryFrames: 29
+  onHit: 18
+  onBlock: -26
+  damage: 60
+  level: 2
+  counterHit: 3
+  isLow: 0
+  isHigh: 0
+  isThrow: 0
+  isAirThrow: 0
+  isSpecial: 1
+  hasNoHitbox: 0
+  changesPosition: 1
+  isProjectile: 0
+  switchesSides: 0
+  initialForce: {x: 0, y: 0}
+  gatlings: []
+  otherBoxes:
+  - {fileID: 8591898009657096129, guid: cd1ceffdf333c04489361d4cc7f0ef8b, type: 3}
+  - {fileID: 1575508758731355970, guid: 0725db8893c78574292dbd3cca875ff7, type: 3}
+  otherBoxFrames: 0800000008000000
+  rekka: {fileID: 0}

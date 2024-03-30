@@ -43,6 +43,7 @@ public class Normals : MonoBehaviour
     [SerializeField] private AttackMove jumpTwoOneFourK;
     [SerializeField] private AttackMove twoThreeSixK;
     [SerializeField] private AttackMove sixTwoThreeS;
+    [SerializeField] private AttackMove sixTwoThreeH;
 
     private PlayerInput _playerInput;
     private PlayerState _playerState;
@@ -137,7 +138,11 @@ public class Normals : MonoBehaviour
             }
             else if (Input.GetKeyDown(heavyKey))
             {
-                if (_specialInput.CheckCombo(new List<int> {1, 2, 3, 7}))
+                if (_specialInput.CheckCombo(new List<int> {3, 2, 3, 7}))
+                {
+                    _playerState.Move(sixTwoThreeH);
+                }
+                else if (_specialInput.CheckCombo(new List<int> {1, 2, 3, 7}))
                 {
                     _playerState.Move(fourOneTwoThreeSixH);
                 }
@@ -193,11 +198,25 @@ public class Normals : MonoBehaviour
             }
             else if (Input.GetKeyDown(slashKey))
             {
-                _playerState.Move(jumpS);
+                if (_specialInput.CheckCombo(new List<int> {3, 2, 3, 6}))
+                {
+                    _playerState.Move(sixTwoThreeS);
+                }
+                else
+                {
+                    _playerState.Move(jumpS);
+                }
             }
             else if (Input.GetKeyDown(heavyKey))
             {
-                _playerState.Move(jumpH);
+                if (_specialInput.CheckCombo(new List<int> {3, 2, 3, 7}))
+                {
+                    _playerState.Move(sixTwoThreeH);
+                }
+                else
+                {
+                    _playerState.Move(jumpH);
+                }
             }
             else if (Input.GetKeyDown(dustKey))
             {
