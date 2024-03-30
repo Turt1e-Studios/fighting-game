@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9e6f1bc1c11b1140b13be15825adc97, type: 3}
-  m_Name: 623K
+  m_Name: 214K
   m_EditorClassIdentifier: 
-  boxes: {fileID: 4266333825344883246, guid: 76b86b80d7c8a974f948e456a5cf50da, type: 3}
-  startupFrames: 6
-  activeFrames: 2
-  recoveryFrames: 41
-  onHit: 15
-  onBlock: 0
-  damage: 100
-  level: 0
-  counterHit: 0
+  boxes: {fileID: 8660614373850141900, guid: 5cd81017e7815194d804b70643250812, type: 3}
+  startupFrames: 30
+  activeFrames: 7
+  recoveryFrames: 13
+  onHit: 44
+  onBlock: -3
+  damage: 50
+  level: 3
+  counterHit: 2
   isLow: 0
-  isHigh: 0
-  isThrow: 1
+  isHigh: 1
+  isThrow: 0
   isAirThrow: 0
   isSpecial: 1
   hasNoHitbox: 0
-  changesPosition: 0
+  changesPosition: 1
   isProjectile: 0
-  switchesSides: 1
+  switchesSides: 0
   gatlings: []

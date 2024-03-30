@@ -39,6 +39,7 @@ public class Normals : MonoBehaviour
     [SerializeField] private AttackMove twoOneFourP;
     [SerializeField] private AttackMove sixTwoThreeK;
     [SerializeField] private AttackMove fourOneTwoThreeSixH;
+    [SerializeField] private AttackMove twoOneFourK;
 
     private PlayerInput _playerInput;
     private PlayerState _playerState;
@@ -85,7 +86,11 @@ public class Normals : MonoBehaviour
             }
             else if (Input.GetKeyDown(kickKey))
             {
-                if (_specialInput.CheckCombo(new List<int> {3, 2, 3, 5}))
+                if (_specialInput.CheckCombo(new List<int> {2, 1, 5}))
+                {
+                    _playerState.Move(twoOneFourK);
+                }
+                else if (_specialInput.CheckCombo(new List<int> {3, 2, 3, 5}))
                 {
                     _playerState.Move(sixTwoThreeK);
                 }
@@ -123,7 +128,6 @@ public class Normals : MonoBehaviour
             {
                 if (_specialInput.CheckCombo(new List<int> {1, 2, 3, 7}))
                 {
-                    //print("doing 623K");
                     _playerState.Move(fourOneTwoThreeSixH);
                 }
                 else switch (_playerInput.CurrentDirection)

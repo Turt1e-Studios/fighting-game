@@ -118,6 +118,13 @@ public class PlayerState : MonoBehaviour
         }
 
         _playerMovement.SetMovement(false);
+
+        if (move.initialForce != new Vector2(0, 0))
+        {
+            print(GetComponent<Rigidbody2D>());
+            float multiplier = _playerMovement.GetDisplacement() > 0 ? 1 : -1;
+            GetComponent<Rigidbody2D>().AddForce(new Vector2(move.initialForce.x * multiplier, move.initialForce.y), ForceMode2D.Impulse);
+        }
         
         StartCoroutine(WaitForFrames(move.startupFrames, () => Active(move)));
     }
@@ -197,9 +204,9 @@ public class PlayerState : MonoBehaviour
 
         _alreadyActivated = false;
         Vector2 newPosition = new Vector2();
-        if (_boxes.transform.Find("Center") != null)
+        if (_boxes.transform.Find("Collider") != null)
         {
-            newPosition = _boxes.transform.Find("Center").transform.position;
+            newPosition = _boxes.transform.Find("Collider").transform.position;
         }
         Destroy(_boxes);
         _blockingBoxes.SetActive(true);

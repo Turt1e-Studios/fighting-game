@@ -26,5 +26,6 @@ public class AttackMove : ScriptableObject
     public bool isProjectile;
     public bool switchesSides;
 
+    public Vector2 initialForce;
     public List<AttackMove> gatlings;
 }
