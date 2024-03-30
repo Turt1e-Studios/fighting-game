@@ -27,6 +27,8 @@ public class PlayerState : MonoBehaviour
     private bool _hasGatling;
     private AttackMove _gatlingMove;
     private SpecialInput _playerInput;
+    private float _timeSinceLastMove;
+    private const float TimeBetweenRekka = 0.75f;
 
     // Start is called before the first frame update
     void Start()
@@ -68,6 +70,10 @@ public class PlayerState : MonoBehaviour
     // Command to attack is activated
     public void Move(AttackMove move)
     {
+        if (Time.time - _timeSinceLastMove < TimeBetweenRekka && move.rekka != null)
+        {
+            move = move.rekka;
+        }
         if (_alreadyActivated)
         {
             //print("follow up move");
@@ -76,6 +82,11 @@ public class PlayerState : MonoBehaviour
                 //print("gatlinged move: " + move);
                 _hasGatling = true;
                 _gatlingMove = move;
+            }
+            else if (move.rekka != null && !_hasGatling) // able to gatling with a rekka
+            {
+                _hasGatling = true;
+                _gatlingMove = move.rekka;
             }
             return;
         }
@@ -221,7 +232,9 @@ public class PlayerState : MonoBehaviour
             _playerMovement.enabled = true;
             _blocking.SetBlock(true);
         }
-        
+
+        _timeSinceLastMove = Time.time;
+
         //_normals.enabled = true;
     }
     

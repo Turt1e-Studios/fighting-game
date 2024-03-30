@@ -173,7 +173,11 @@ public class Normals : MonoBehaviour
             }
             else if (Input.GetKeyDown(kickKey))
             {
-                if (_specialInput.CheckCombo(new List<int> {2, 1, 5}))
+                if (_specialInput.CheckCombo(new List<int> {2, 3, 5}))
+                {
+                    _playerState.Move(twoThreeSixK);
+                }
+                else if (_specialInput.CheckCombo(new List<int> {2, 1, 5}))
                 {
                     _playerState.Move(jumpTwoOneFourK);
                 }

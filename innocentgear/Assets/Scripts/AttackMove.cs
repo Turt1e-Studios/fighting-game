@@ -28,4 +28,5 @@ public class AttackMove : ScriptableObject
 
     public Vector2 initialForce;
     public List<AttackMove> gatlings;
+    public AttackMove rekka;
 }
