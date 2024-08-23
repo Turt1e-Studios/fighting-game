@@ -1,2 +1,2 @@
 # fighting-game
-totally not a clone of Guilty Gear
+inspired by Guilty Gear
